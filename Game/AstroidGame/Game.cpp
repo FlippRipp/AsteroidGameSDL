@@ -33,6 +33,8 @@ Game::Game(const char* title, int resX, int resY, bool fullscreen)
 		cout << "Error on SDL Init Error code: " << error << endl;
 
 	}
+
+	inputs = new Inputs();
 }
 
 Game::~Game()
@@ -41,14 +43,56 @@ Game::~Game()
 
 void Game::Update()
 {
+	inputs->UpdateInputs();
+
 }
 
 void Game::Render()
 {
 	SDL_RenderClear(renderer);
-
-	//render stuff here
-	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+	if (inputs->wDown)
+	{
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	}
+	else
+	{
+		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+	}
+	//render stuff here	
 
 	SDL_RenderPresent(renderer);
+
+}
+
+void Game::GameLoop() {
+
+	while (true)
+	{		
+		cycleCount++;
+		if (cycleCount % 3 == 0)
+		{
+			double newTime = SDL_GetTicks();
+			cycleTime = (newTime - independedGameTime) / 3;
+			independedGameTime = newTime;				
+		}
+
+		accumilator += cycleTime;		
+
+		double framesec = 1 / DesiredFps;
+		double frameMiliSec = framesec * msPerSecond;
+		//cout << "accumilator = " << accumilator << endl;
+		//cout << "frameMiliSec = " << frameMiliSec << endl;
+		if (accumilator > frameMiliSec)
+		{			
+			frameCounter++;
+			accumilator = 0;
+			double newTime = SDL_GetTicks();
+			deltaTime = newTime - gameTime;
+			gameTime = newTime;
+			//cout << "deltatime = " << deltaTime << " gametime = " << gameTime << endl;
+			//cout << frameCounter / (gameTime / 1000) << endl;
+			Update();
+			Render();
+		}
+	}
 }
