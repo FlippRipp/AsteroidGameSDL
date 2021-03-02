@@ -7,10 +7,9 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-	Game* game = new Game("Asteroid",100, 100, 0);
+	Game* game = new Game("Asteroid",1000, 1000, 0);
 		
-	game->GameLoop();
-	
+	game->GameLoop();	
 
 	return 0;
 }

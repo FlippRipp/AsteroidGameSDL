@@ -3,6 +3,7 @@ using namespace std;
 #include "SDL.h"
 #include <iostream>
 #include "Inputs.h"
+#include "Player.h"
 
 class Game
 {
@@ -15,8 +16,9 @@ public:
 	void Render();
 
 	Inputs* inputs;
+	Player* player;
 
-	const double DesiredFps = 30;
+	const double DesiredFps = 60;
 	const double msPerSecond = 1000;	
 	double gameTime;
 	double deltaTime;

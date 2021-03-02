@@ -1,5 +1,6 @@
 #include "Game.h"
 
+
 Game::Game(const char* title, int resX, int resY, bool fullscreen)
 {
 	int error = SDL_Init(SDL_INIT_EVERYTHING);
@@ -35,6 +36,7 @@ Game::Game(const char* title, int resX, int resY, bool fullscreen)
 	}
 
 	inputs = new Inputs();
+	player = new Player(Vector2(resX / 2, resY / 2), Vector2(50, 50), 25);
 }
 
 Game::~Game()
@@ -43,25 +45,18 @@ Game::~Game()
 
 void Game::Update()
 {
-	cout << frameCounter << endl;
+	//cout << frameCounter << endl;
 	inputs->UpdateInputs();
+	player->UpdatePlayer(inputs,deltaTime);
 }
 
 void Game::Render()
 {
 	SDL_RenderClear(renderer);
-	if (inputs->wDown)
-	{
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-	}
-	else
-	{
-		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-	}
+	player->Render(renderer);
 	//render stuff here	
-
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderPresent(renderer);
-
 }
 
 void Game::GameLoop() {
@@ -87,9 +82,9 @@ void Game::GameLoop() {
 			frameCounter++;
 			accumilator = 0;
 			double newTime = SDL_GetTicks();
-			deltaTime = newTime - gameTime;
+			deltaTime = (newTime - gameTime) / 1000;
 			gameTime = newTime;
-			//cout << "deltatime = " << deltaTime << " gametime = " << gameTime << endl;
+			cout << "deltatime = " << deltaTime << " gametime = " << gameTime << endl;
 			//cout << frameCounter / (gameTime / 1000) << endl;
 			Update();
 			Render();

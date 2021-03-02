@@ -11,59 +11,40 @@ Inputs::~Inputs()
 
 void Inputs::UpdateInputs()
 {
-	ResetKeyState();
-
-	bool nothingPressed = true;
-
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
 		switch (event.type)
 		{
 		case SDL_KEYDOWN:
-			nothingPressed = false;
-			ChangeKeyState(event);
+			ChangeKeyState(event, true);
 			break;
+		case SDL_KEYUP: 
+			ChangeKeyState(event, false);
 		default:
 			break;
 		}
-	}
-
-	if (nothingPressed)
-	{
-	}
-
+	}	
 }
 
-void Inputs::ChangeKeyState(SDL_Event event)
+void Inputs::ChangeKeyState(SDL_Event event, bool state)
 {
+
 	switch (event.key.keysym.sym)
 	{
 	case SDLK_w:
-		wDown = true;
-		cout << "w Pressed down" << endl;
+		wDown = state;
+		//cout << "w Pressed, " << state << endl;
 		break;
 	case SDLK_s:
-		sDown = true;
+		sDown = state;
 		break;
 	case SDLK_a:
-		aDown = true;
+		aDown = state;
 		break;
 	case SDLK_d:
-		dDown = true;
+		dDown = state;
 		break;
 	default:
 		break;
 	}
 }
-
-void Inputs::ResetKeyState()
-{
-	wDown = false;
-	sDown = false;
-	dDown = false;
-	aDown = false;
-}
-
-
-
-

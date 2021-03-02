@@ -10,8 +10,7 @@ public:
 	~Inputs();
 
 	void UpdateInputs();
-	void ChangeKeyState(SDL_Event event);
-	void ResetKeyState();
+	void ChangeKeyState(SDL_Event event, bool state);
 
 	bool wDown = false;
 	bool sDown = false;
