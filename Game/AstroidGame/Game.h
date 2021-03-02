@@ -30,4 +30,6 @@ private:
 	double accumilator = 0;
 	double cycleTime;
 	double independedGameTime;	
+	
+	bool isRunning = true;
 };

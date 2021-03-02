@@ -17,6 +17,8 @@ public:
 	bool dDown = false;
 	bool aDown = false;	
 
+	bool quitPressed = false;
+
 private:
 
 };

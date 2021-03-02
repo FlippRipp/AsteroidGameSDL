@@ -17,6 +17,28 @@ Vector2::~Vector2()
 {
 }
 
+Vector2 Vector2::Clamp(Vector2 pos, Vector2 min, Vector2 max)
+{
+	if (pos.x > max.x)
+	{
+		pos.x = max.x;
+	}
+	else if(pos.x < min.x)
+	{
+		pos.x = min.x;
+	}
+
+	if (pos.y > max.y)
+	{
+		pos.y = max.y;
+	}
+	else if(pos.y < min.y)
+	{
+		pos.y = min.y;
+	}
+	return pos;
+}
+
 Vector2 Vector2::Normalized()
 {
 	double magn = Magnitude();

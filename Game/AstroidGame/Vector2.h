@@ -18,9 +18,11 @@ public:
 	static Vector2 GetDirection(Vector2 from, Vector2 to);
 	static Vector2 GetNormalizedDirection(Vector2 from, Vector2 to);
 	static Vector2 Zero(){return Vector2(0,0); }
+	
+	static Vector2 Clamp(Vector2 pos, Vector2 min, Vector2 max);
 
-	void Normalize();
 	Vector2 Normalized();
+	void Normalize();
 	double Magnitude() { return sqrt(x * x + y * y); }
 
 	Vector2 operator+(const Vector2);

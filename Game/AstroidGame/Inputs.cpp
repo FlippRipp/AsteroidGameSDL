@@ -18,6 +18,10 @@ void Inputs::UpdateInputs()
 		case SDL_KEYDOWN:
 			ChangeKeyState(event, true);
 			break;
+		case SDL_QUIT:
+			quitPressed = true;		
+			cout << "Quit" << endl;
+			break;
 		case SDL_KEYUP: 
 			ChangeKeyState(event, false);
 		default:
@@ -43,6 +47,9 @@ void Inputs::ChangeKeyState(SDL_Event event, bool state)
 		break;
 	case SDLK_d:
 		dDown = state;
+		break;
+	case SDLK_ESCAPE:
+		quitPressed = true;
 		break;
 	default:
 		break;

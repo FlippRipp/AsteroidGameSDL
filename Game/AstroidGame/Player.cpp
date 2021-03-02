@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(Vector2 startPos, Vector2 size, int radius)
+Player::Player(Vector2 startPos, Vector2 size, int radius, Vector2 screenS)
 {
 	rect = SDL_Rect();
 	rect.x = startPos.x;
@@ -9,6 +9,7 @@ Player::Player(Vector2 startPos, Vector2 size, int radius)
 	rect.h = size.y;
 
 	position = startPos;
+	screenSize = screenS;
 }
 
 Player::~Player()
@@ -41,4 +42,6 @@ void Player::UpdatePlayer(Inputs* input, double deltaTime)
 	{
 		position.y += (speed * deltaTime);
 	}
+
+	position = Vector2::Clamp(position, Vector2(0, 0), Vector2(screenSize.x - rect.w, screenSize.y - rect.h));
 }

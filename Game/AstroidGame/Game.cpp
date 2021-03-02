@@ -36,7 +36,7 @@ Game::Game(const char* title, int resX, int resY, bool fullscreen)
 	}
 
 	inputs = new Inputs();
-	player = new Player(Vector2(resX / 2, resY / 2), Vector2(50, 50), 25);
+	player = new Player(Vector2(resX / 2, resY / 2), Vector2(50, 50), 25, Vector2(resX, resY));
 }
 
 Game::~Game()
@@ -45,9 +45,15 @@ Game::~Game()
 
 void Game::Update()
 {
+
 	//cout << frameCounter << endl;
 	inputs->UpdateInputs();
 	player->UpdatePlayer(inputs,deltaTime);
+
+	if (inputs->quitPressed)
+	{
+		isRunning = false;
+	}
 }
 
 void Game::Render()
@@ -61,7 +67,7 @@ void Game::Render()
 
 void Game::GameLoop() {
 
-	while (true)
+	while (isRunning)
 	{
 		cycleCount++;
 		if (cycleCount % 3 == 0)
@@ -90,4 +96,9 @@ void Game::GameLoop() {
 			Render();
 		}
 	}
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	SDL_Quit();
+
+
 }

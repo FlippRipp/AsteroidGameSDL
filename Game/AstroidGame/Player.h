@@ -8,7 +8,7 @@
 class Player
 {
 public:
-	Player(Vector2 startPos, Vector2 size, int radius);
+	Player(Vector2 startPos, Vector2 size, int radius, Vector2 screenS);
 	~Player();
 
 	void Render(SDL_Renderer* renderer);
@@ -19,4 +19,5 @@ private:
 	SDL_Rect rect;	
 	const double speed = 100;
 	int radius = 10;
+	Vector2 screenSize;
 };
