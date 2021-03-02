@@ -43,8 +43,8 @@ Game::~Game()
 
 void Game::Update()
 {
+	cout << frameCounter << endl;
 	inputs->UpdateInputs();
-
 }
 
 void Game::Render()
@@ -67,7 +67,7 @@ void Game::Render()
 void Game::GameLoop() {
 
 	while (true)
-	{		
+	{
 		cycleCount++;
 		if (cycleCount % 3 == 0)
 		{

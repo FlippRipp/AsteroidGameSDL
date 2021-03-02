@@ -13,16 +13,23 @@ void Inputs::UpdateInputs()
 {
 	ResetKeyState();
 
+	bool nothingPressed = true;
+
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
 		switch (event.type)
 		{
 		case SDL_KEYDOWN:
+			nothingPressed = false;
 			ChangeKeyState(event);
 			break;
 		default:
 			break;
 		}
+	}
+
+	if (nothingPressed)
+	{
 	}
 
 }
@@ -33,6 +40,7 @@ void Inputs::ChangeKeyState(SDL_Event event)
 	{
 	case SDLK_w:
 		wDown = true;
+		cout << "w Pressed down" << endl;
 		break;
 	case SDLK_s:
 		sDown = true;

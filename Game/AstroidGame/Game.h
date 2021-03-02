@@ -16,7 +16,7 @@ public:
 
 	Inputs* inputs;
 
-	const double DesiredFps = 60;
+	const double DesiredFps = 30;
 	const double msPerSecond = 1000;	
 	double gameTime;
 	double deltaTime;
