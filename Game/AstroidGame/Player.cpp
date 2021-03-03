@@ -22,6 +22,11 @@ void Player::Render(SDL_Renderer * renderer)
 	rect.y = round(position.y);
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	SDL_RenderFillRect(renderer, &rect);
+
+	for (int i = 0; i < bulletList.size(); i++)
+	{
+		bulletList[i]->Render(renderer);
+	}
 }
 
 void Player::UpdatePlayer(Inputs* input, double deltaTime, double time)
@@ -80,5 +85,27 @@ void Player::UpdatePlayer(Inputs* input, double deltaTime, double time)
 		isGrounded = false;
 	}
 
+	if (input->kDown)
+	{
+		Shoot();
+	}
+
 	position = Vector2::Clamp(position, Vector2(0, 0), Vector2(screenSize.x - rect.w, screenSize.y - rect.h));
+
+	for (int i = 0; i < bulletList.size(); i++)
+	{
+		if (bulletList[i]->Destroy) 
+		{
+			bulletList.erase(bulletList.begin()+i);
+			cout << bulletList[i]->Destroy << endl;
+		}		
+
+		bulletList[i]->Update(deltaTime);
+	}
+}
+
+void Player::Shoot()
+{
+	Bullet* bullet = new Bullet(Vector2(0,-1), position);
+	bulletList.push_back(bullet);
 }

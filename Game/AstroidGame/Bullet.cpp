@@ -21,4 +21,10 @@ void Bullet::Render(SDL_Renderer * renderer)
 
 void Bullet::Update(double deltaTime)
 {
+	position += direction * (bulletSpeed * deltaTime);
+	lifeTimer += deltaTime;
+	if (lifeTimer > lifeTime)
+	{
+		Destroy = true;
+	}
 }

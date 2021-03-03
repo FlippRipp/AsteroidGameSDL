@@ -16,6 +16,7 @@ public:
 	bool sDown = false;
 	bool dDown = false;
 	bool aDown = false;	
+	bool kDown = false;			// Button you shoot with
 
 	bool quitPressed = false;
 

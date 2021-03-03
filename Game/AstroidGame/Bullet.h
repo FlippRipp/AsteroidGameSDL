@@ -14,11 +14,12 @@ public:
 
 	void Render(SDL_Renderer* renderer);
 	void Update(double deltaTime);
+	bool Destroy = false;
 
 private:
 	const double bulletSpeed = 30;
 	const double lifeTime = 5;
-	double timer = 0;
+	double lifeTimer = 0;
 	SDL_Rect rect;
 	int size = 4;
 	Vector2 direction;

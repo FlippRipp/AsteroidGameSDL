@@ -51,6 +51,9 @@ void Inputs::ChangeKeyState(SDL_Event event, bool state)
 	case SDLK_ESCAPE:
 		quitPressed = true;
 		break;
+	case SDLK_k:
+		kDown = state;
+		break;
 	default:
 		break;
 	}

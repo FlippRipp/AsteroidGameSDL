@@ -1,9 +1,11 @@
 #pragma once
 #include "SDL.h"
 #include "Vector2.h"
+#include <vector>
 #include "Inputs.h"
 #include <math.h>
 #include <iostream>
+#include "Bullet.h"
 
 class Player
 {
@@ -13,6 +15,7 @@ public:
 
 	void Render(SDL_Renderer* renderer);
 	void UpdatePlayer(Inputs* input, double deltaTime, double time);
+	void Shoot();
 	
 private:
 	Vector2 position;
@@ -31,4 +34,6 @@ private:
 	double boostMaxTime = 3;
 	double boostStartTime = 0;
 	bool isBoosting = false;
+		
+	vector<Bullet*> bulletList;
 };
