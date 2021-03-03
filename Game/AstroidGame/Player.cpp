@@ -24,7 +24,7 @@ void Player::Render(SDL_Renderer * renderer)
 	SDL_RenderFillRect(renderer, &rect);
 }
 
-void Player::UpdatePlayer(Inputs* input, double deltaTime)
+void Player::UpdatePlayer(Inputs* input, double deltaTime, double time)
 {	
 	if (input->aDown)
 	{
@@ -34,13 +34,50 @@ void Player::UpdatePlayer(Inputs* input, double deltaTime)
 	{
 		position.x += (speed * deltaTime);
 	}
+
 	if (input->wDown)
 	{
-		position.y -= (speed * deltaTime);
+		if (!isBoosting && isGrounded)
+		{
+			boostStartTime = time;
+			isBoosting = true;
+		}
+		else if(isBoosting)
+		{
+			if (time - boostStartTime > boostMaxTime)
+			{
+				isBoosting = false;
+				boostSpeed = 0;
+			}
+
+			boostSpeed += boostAcceleration * deltaTime;
+			position.y -= (boostSpeed + gravity) * deltaTime;
+		}
 	}
+	else
+	{
+		isBoosting = false;
+		boostSpeed = 0;
+	}
+
+
 	if (input->sDown)
 	{
-		position.y += (speed * deltaTime);
+		position.y += speed * deltaTime;
+	}
+
+	cout << "bottom of screen = " << (screenSize.y - rect.h) << "Player y = " << position.y << "isGrounded = " << isGrounded << endl;
+
+	if ((screenSize.y - rect.h) - position.y < groundClearance)
+	{
+		gravity = 0;
+		isGrounded = true;
+	}
+	else
+	{
+		if(!isBoosting) gravity += gravityAcceleration * deltaTime;
+		position.y += gravity * deltaTime;
+		isGrounded = false;
 	}
 
 	position = Vector2::Clamp(position, Vector2(0, 0), Vector2(screenSize.x - rect.w, screenSize.y - rect.h));

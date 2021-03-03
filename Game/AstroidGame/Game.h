@@ -14,6 +14,7 @@ public:
 	void GameLoop();
 	void Update();
 	void Render();
+	double GetTimeSec() { return gameTime / 1000; }
 
 	Inputs* inputs;
 	Player* player;

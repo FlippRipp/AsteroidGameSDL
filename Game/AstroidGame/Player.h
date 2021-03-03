@@ -12,7 +12,7 @@ public:
 	~Player();
 
 	void Render(SDL_Renderer* renderer);
-	void UpdatePlayer(Inputs* input, double deltaTime);
+	void UpdatePlayer(Inputs* input, double deltaTime, double time);
 	
 private:
 	Vector2 position;
@@ -20,4 +20,15 @@ private:
 	const double speed = 100;
 	int radius = 10;
 	Vector2 screenSize;
+
+	const double gravityAcceleration = 100;
+	double gravity = 0;
+
+	double groundClearance = 2;
+	bool isGrounded = false;
+	const double boostAcceleration = 75;
+	double boostSpeed = 0;
+	double boostMaxTime = 3;
+	double boostStartTime = 0;
+	bool isBoosting = false;
 };

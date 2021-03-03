@@ -48,7 +48,7 @@ void Game::Update()
 
 	//cout << frameCounter << endl;
 	inputs->UpdateInputs();
-	player->UpdatePlayer(inputs,deltaTime);
+	player->UpdatePlayer(inputs,deltaTime, GetTimeSec());
 
 	if (inputs->quitPressed)
 	{
@@ -90,7 +90,7 @@ void Game::GameLoop() {
 			double newTime = SDL_GetTicks();
 			deltaTime = (newTime - gameTime) / 1000;
 			gameTime = newTime;
-			cout << "deltatime = " << deltaTime << " gametime = " << gameTime << endl;
+			//cout << "deltatime = " << deltaTime << " gametime = " << gameTime << endl;
 			//cout << frameCounter / (gameTime / 1000) << endl;
 			Update();
 			Render();
