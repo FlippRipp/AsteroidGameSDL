@@ -1,12 +1,14 @@
 #include "Player.h"
 
-Player::Player(Vector2 startPos, Vector2 size, int radius, Vector2 screenS)
+Player::Player(Vector2 startPos, Vector2 size, int r, Vector2 screenS)
 {
 	rect = SDL_Rect();
 	rect.x = startPos.x;
 	rect.y = startPos.y;
 	rect.w = size.x;
 	rect.h = size.y;
+
+	radius = r;
 
 	position = startPos;
 	screenSize = screenS;
@@ -18,28 +20,87 @@ Player::~Player()
 
 void Player::Render(SDL_Renderer * renderer)
 {
+	for (int i = 0; i < BulletPoolSize; i++)
+	{
+		if (bulletList[i] != NULL)
+		{
+			if (bulletList[i]->isActive) bulletList[i]->Render(renderer);
+		}
+	}
+
 	rect.x = round(position.x);
 	rect.y = round(position.y);
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	SDL_RenderFillRect(renderer, &rect);
 
-	for (int i = 0; i < bulletList.size(); i++)
-	{
-		bulletList[i]->Render(renderer);
-	}
 }
 
 void Player::UpdatePlayer(Inputs* input, double deltaTime, double time)
 {	
+	bool horizontalMovement = false;
 	if (input->aDown)
 	{
-		position.x -= (speed * deltaTime);
+		horizontalMovement = true;
+		velocity.x = -speed;
 	}
 	if (input->dDown)
 	{
-		position.x += (speed * deltaTime);
+		horizontalMovement = true;
+		velocity.x = speed;
 	}
 
+	if (!horizontalMovement)
+	{
+		velocity.x = 0;
+	}
+
+	UpdateBoost(time, input);
+
+	GravityUpdate();
+
+	Move(deltaTime);
+
+
+
+
+	if (input->kDown && time - lastFireTime > timeBetweenBullets)
+	{
+		lastFireTime = time;
+		Shoot();
+	}
+
+	for (int i = 0; i < BulletPoolSize; i++)
+	{
+		if (bulletList[i] != nullptr)
+		{
+			if(bulletList[i]->isActive) bulletList[i]->Update(deltaTime);
+		}
+	}
+}
+
+void Player::Shoot()
+{
+	
+	for (int i = 0; i < BulletPoolSize; i++)
+	{
+		if (bulletList[i] == nullptr)
+		{
+			bulletList[i] = new Bullet(Vector2(0, -1), Vector2(position.x + rect.w / 2, position.y));
+			break;
+		}
+		else if (!bulletList[i]->isActive)
+		{
+			bulletList[i]->isActive = true;
+			bulletList[i]->position = Vector2(position.x + rect.w / 2 - bulletList[i]->size / 2, position.y);
+			bulletList[i]->direction = Vector2(0, -1);
+			bulletList[i]->lifeTimer = 0;
+			break;
+		}
+	}
+}
+
+void Player::UpdateBoost(double time, Inputs* input)
+{
 	if (input->wDown)
 	{
 		if (!isBoosting && isGrounded)
@@ -47,65 +108,47 @@ void Player::UpdatePlayer(Inputs* input, double deltaTime, double time)
 			boostStartTime = time;
 			isBoosting = true;
 		}
-		else if(isBoosting)
+
+		if (isBoosting)
 		{
 			if (time - boostStartTime > boostMaxTime)
 			{
 				isBoosting = false;
-				boostSpeed = 0;
 			}
 
-			boostSpeed += boostAcceleration * deltaTime;
-			position.y -= (boostSpeed + gravity) * deltaTime;
+			velocity.y -= boostAcceleration;
 		}
 	}
 	else
 	{
 		isBoosting = false;
-		boostSpeed = 0;
 	}
 
+}
 
-	if (input->sDown)
-	{
-		position.y += speed * deltaTime;
-	}
-
-	//cout << "bottom of screen = " << (screenSize.y - rect.h) << "Player y = " << position.y << " isGrounded = " << isGrounded << endl;
-
+void Player::GravityUpdate()
+{
 	if ((screenSize.y - rect.h) - position.y < groundClearance)
 	{
-		gravity = 0;
-		isGrounded = true;
+		if (!isGrounded)
+		{
+			isGrounded = true;
+			velocity.y = 0;
+		}
 	}
 	else
 	{
-		if(!isBoosting) gravity += gravityAcceleration * deltaTime;
-		position.y += gravity * deltaTime;
+		if (!isBoosting) velocity.y += gravityAcceleration;
 		isGrounded = false;
-	}
-
-	if (input->kDown)
-	{
-		Shoot();
-	}
-
-	position = Vector2::Clamp(position, Vector2(0, 0), Vector2(screenSize.x - rect.w, screenSize.y - rect.h));
-
-	for (int i = 0; i < bulletList.size(); i++)
-	{
-		if (bulletList[i]->Destroy) 
-		{
-			bulletList.erase(bulletList.begin()+i);
-			cout << bulletList[i]->Destroy << endl;
-		}		
-
-		bulletList[i]->Update(deltaTime);
 	}
 }
 
-void Player::Shoot()
+void Player::Move(double deltaTime)
 {
-	Bullet* bullet = new Bullet(Vector2(0,-1), position);
-	bulletList.push_back(bullet);
+	cout << "vel = " << velocity.y << endl;
+
+	position += velocity * deltaTime;
+
+	position = Vector2::Clamp(position, Vector2(0, 0), Vector2(screenSize.x - rect.w, screenSize.y - rect.h));
+
 }

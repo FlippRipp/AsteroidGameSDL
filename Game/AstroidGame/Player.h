@@ -24,16 +24,26 @@ private:
 	int radius = 10;
 	Vector2 screenSize;
 
-	const double gravityAcceleration = 100;
+	void UpdateBoost(double time, Inputs* input);
+	void GravityUpdate();
+	void Move(double deltaTime);
+
+	Vector2 velocity;
+
+	const double gravityAcceleration = 20;
 	double gravity = 0;
 
 	double groundClearance = 2;
 	bool isGrounded = false;
-	const double boostAcceleration = 75;
-	double boostSpeed = 0;
-	double boostMaxTime = 3;
+	const double boostAcceleration = 5;
+	double boostMaxTime = 1.7;
 	double boostStartTime = 0;
 	bool isBoosting = false;
-		
-	vector<Bullet*> bulletList;
+
+	static const int BulletPoolSize = 1000;
+
+	double lastFireTime = 0;
+	double timeBetweenBullets = 0.1f;
+
+	Bullet* bulletList[BulletPoolSize] = { };
 };
