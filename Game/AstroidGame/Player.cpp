@@ -66,7 +66,7 @@ void Player::UpdatePlayer(Inputs* input, double deltaTime, double time)
 		position.y += speed * deltaTime;
 	}
 
-	cout << "bottom of screen = " << (screenSize.y - rect.h) << "Player y = " << position.y << "isGrounded = " << isGrounded << endl;
+	//cout << "bottom of screen = " << (screenSize.y - rect.h) << "Player y = " << position.y << " isGrounded = " << isGrounded << endl;
 
 	if ((screenSize.y - rect.h) - position.y < groundClearance)
 	{
