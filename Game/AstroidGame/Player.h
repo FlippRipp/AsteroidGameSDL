@@ -17,8 +17,9 @@ public:
 	void UpdatePlayer(Inputs* input, double deltaTime, double time);
 	void Shoot();
 	
-private:
 	Vector2 position;
+
+private:
 	SDL_Rect rect;	
 	const double speed = 100;
 	int radius = 10;

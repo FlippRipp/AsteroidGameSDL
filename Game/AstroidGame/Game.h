@@ -4,6 +4,7 @@ using namespace std;
 #include <iostream>
 #include "Inputs.h"
 #include "Player.h"
+#include "AsteroidController.h"
 
 class Game
 {
@@ -18,6 +19,7 @@ public:
 
 	Inputs* inputs;
 	Player* player;
+	AsteroidController* asteroidController;
 
 	const double DesiredFps = 60;
 	const double msPerSecond = 1000;	

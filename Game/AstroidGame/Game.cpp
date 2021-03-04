@@ -37,6 +37,7 @@ Game::Game(const char* title, int resX, int resY, bool fullscreen)
 
 	inputs = new Inputs();
 	player = new Player(Vector2(resX / 2, resY / 2), Vector2(50, 50), 25, Vector2(resX, resY));
+	asteroidController = new AsteroidController(3 , 0.01, player);
 }
 
 Game::~Game()
@@ -49,6 +50,7 @@ void Game::Update()
 	//cout << frameCounter << endl;
 	inputs->UpdateInputs();
 	player->UpdatePlayer(inputs,deltaTime, GetTimeSec());
+	asteroidController->Update(deltaTime, GetTimeSec());
 
 	if (inputs->quitPressed)
 	{
@@ -60,6 +62,7 @@ void Game::Render()
 {
 	SDL_RenderClear(renderer);
 	player->Render(renderer);
+	asteroidController->Render(renderer);
 	//render stuff here	
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderPresent(renderer);
@@ -96,9 +99,12 @@ void Game::GameLoop() {
 			Render();
 		}
 	}
+
+	delete player;
+	delete inputs;
+	delete asteroidController;
+
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
-
-
 }

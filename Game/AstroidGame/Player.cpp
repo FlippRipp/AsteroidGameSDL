@@ -16,6 +16,13 @@ Player::Player(Vector2 startPos, Vector2 size, int r, Vector2 screenS)
 
 Player::~Player()
 {
+	for (int i = 0; i < BulletPoolSize; i++)
+	{
+		if (bulletList[i] != NULL)
+		{
+			delete bulletList[i];
+		}
+	}
 }
 
 void Player::Render(SDL_Renderer * renderer)
