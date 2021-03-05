@@ -24,7 +24,7 @@ void Asteroid::Render(SDL_Renderer * renderer)
 {	
 	rect.x = round(position.x);
 	rect.y = round(position.y);
-	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+	SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
 	SDL_RenderFillRect(renderer, &rect);
 }
 

@@ -25,6 +25,15 @@ Game::Game(const char* title, int resX, int resY, bool fullscreen)
 		{
 			cout << "Renderer successfully created" << endl;
 			SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+			int imageFlags = IMG_INIT_PNG;
+			if (!(IMG_Init(imageFlags) & imageFlags))
+			{
+				cout << "IMG_Init failed to created SDL_image Error: %s/n" << IMG_GetError() << endl;				
+			}
+			else
+			{
+				cout << "IMG_Init successfully created" << endl;
+			}
 		}
 
 		SDL_RenderPresent(renderer);
@@ -37,7 +46,7 @@ Game::Game(const char* title, int resX, int resY, bool fullscreen)
 
 	inputs = new Inputs();
 	player = new Player(Vector2(resX / 2, resY / 2), Vector2(50, 50), Vector2(resX, resY));
-	asteroidController = new AsteroidController(0.02 , 0.001, player, Vector2(resX, resY));
+	asteroidController = new AsteroidController(1 , 0.001, player, Vector2(resX, resY));
 }
 
 Game::~Game()

@@ -5,6 +5,7 @@ using namespace std;
 #include "Inputs.h"
 #include "Player.h"
 #include "AsteroidController.h"
+#include <SDL_image.h>
 
 class Game
 {
