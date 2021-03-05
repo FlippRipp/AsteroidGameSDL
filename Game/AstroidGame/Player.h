@@ -10,7 +10,7 @@
 class Player
 {
 public:
-	Player(Vector2 startPos, Vector2 size, int radius, Vector2 screenS);
+	Player(Vector2 startPos, Vector2 size, Vector2 screenS, int radius = 0);
 	~Player();
 
 	void Render(SDL_Renderer* renderer);
@@ -19,10 +19,12 @@ public:
 	
 	Vector2 position;
 
+	static const int BulletPoolSize = 1000;
+	Bullet* bulletList[BulletPoolSize] = { };
+	int radius = 10;
 private:
 	SDL_Rect rect;	
 	const double speed = 100;
-	int radius = 10;
 	Vector2 screenSize;
 
 	void UpdateBoost(double time, Inputs* input);
@@ -41,10 +43,7 @@ private:
 	double boostStartTime = 0;
 	bool isBoosting = false;
 
-	static const int BulletPoolSize = 1000;
-
 	double lastFireTime = 0;
-	double timeBetweenBullets = 0.1f;
+	double timeBetweenBullets = 0.001f;
 
-	Bullet* bulletList[BulletPoolSize] = { };
 };

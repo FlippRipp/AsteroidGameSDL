@@ -36,8 +36,8 @@ Game::Game(const char* title, int resX, int resY, bool fullscreen)
 	}
 
 	inputs = new Inputs();
-	player = new Player(Vector2(resX / 2, resY / 2), Vector2(50, 50), 25, Vector2(resX, resY));
-	asteroidController = new AsteroidController(3 , 0.01, player);
+	player = new Player(Vector2(resX / 2, resY / 2), Vector2(50, 50), Vector2(resX, resY));
+	asteroidController = new AsteroidController(0.02 , 0.001, player, Vector2(resX, resY));
 }
 
 Game::~Game()
@@ -93,7 +93,7 @@ void Game::GameLoop() {
 			double newTime = SDL_GetTicks();
 			deltaTime = (newTime - gameTime) / 1000;
 			gameTime = newTime;
-			//cout << "deltatime = " << deltaTime << " gametime = " << gameTime << endl;
+			cout << "deltatime = " << deltaTime << " gametime = " << gameTime << endl;
 			//cout << frameCounter / (gameTime / 1000) << endl;
 			Update();
 			Render();

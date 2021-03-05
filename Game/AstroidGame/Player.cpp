@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(Vector2 startPos, Vector2 size, int r, Vector2 screenS)
+Player::Player(Vector2 startPos, Vector2 size, Vector2 screenS, int radius)
 {
 	rect = SDL_Rect();
 	rect.x = startPos.x;
@@ -8,7 +8,7 @@ Player::Player(Vector2 startPos, Vector2 size, int r, Vector2 screenS)
 	rect.w = size.x;
 	rect.h = size.y;
 
-	radius = r;
+	if(radius = 0) radius = std::fmin(size.x, size.y);
 
 	position = startPos;
 	screenSize = screenS;
@@ -152,8 +152,6 @@ void Player::GravityUpdate()
 
 void Player::Move(double deltaTime)
 {
-	cout << "vel = " << velocity.y << endl;
-
 	position += velocity * deltaTime;
 
 	position = Vector2::Clamp(position, Vector2(0, 0), Vector2(screenSize.x - rect.w, screenSize.y - rect.h));

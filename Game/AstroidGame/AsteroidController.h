@@ -5,7 +5,7 @@
 class AsteroidController
 {
 public:
-	AsteroidController(double delayStart, double delayDecrease, Player* p);
+	AsteroidController(double delayStart, double delayDecrease, Player* p, Vector2 screen);
 	~AsteroidController();
 
 	void Update(double deltaTime, double time);
@@ -16,9 +16,11 @@ private:
 
 	void spawnAsteroid();
 
-	static const int asteroidPoolSize = 50;
+	static const int asteroidPoolSize = 1000;
 	Asteroid* asteroids[asteroidPoolSize];
 	Player* player;
+
+	Vector2 screenSize;
 
 	double asteroidSpawnDelay;
 	double asteroidSpawnDecrease;

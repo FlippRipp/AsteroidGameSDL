@@ -13,7 +13,7 @@ Bullet::~Bullet()
 
 void Bullet::Render(SDL_Renderer * renderer)
 {
-	std::cout << position.x << std::endl;
+	//std::cout << position.x << std::endl;
 	rect.x = round(position.x);
 	rect.y = round(position.y);
 	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
