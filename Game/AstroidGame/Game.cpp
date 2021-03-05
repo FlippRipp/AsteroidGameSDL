@@ -46,7 +46,7 @@ Game::Game(const char* title, int resX, int resY, bool fullscreen)
 
 	inputs = new Inputs();
 	player = new Player(Vector2(resX / 2, resY / 2), Vector2(50, 50), Vector2(resX, resY));
-	asteroidController = new AsteroidController(1 , 0.001, player, Vector2(resX, resY));
+	asteroidController = new HazardController(1 , 0.001, player, Vector2(resX, resY), renderer);
 }
 
 Game::~Game()

@@ -6,6 +6,7 @@
 #include <math.h>
 #include <iostream>
 #include "Bullet.h"
+#include "RenderingUtilities.h"
 
 class Player
 {
@@ -44,6 +45,7 @@ private:
 	bool isBoosting = false;
 
 	double lastFireTime = 0;
-	double timeBetweenBullets = 0.001f;
+	double timeBetweenBullets = 0.2f;
 
+	SDL_Texture* texture;
 };

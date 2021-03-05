@@ -6,28 +6,31 @@
 #include "Bullet.h"
 #include "Player.h"
 
-class Asteroid
+class HomingRocket
 {
 public:
-	Asteroid(SDL_Texture* texture);
-	~Asteroid();
+	HomingRocket(SDL_Texture* texture);
+	~HomingRocket();
 
-	void Update(double deltaTime);
+	void Update(Player * player, double deltaTime, double time);
 	void Render(SDL_Renderer* renderer);
 
 	void CollisionCheck(Player* player);
 
-	void Init(Vector2 pos, Vector2 vel, Vector2 gravityAccel, int size);
+	void Init(Vector2 pos, double speed);
 
 	bool isActive = false;
 
 private:
-	double lifeTimer = 0;
-	double lifeTime = 10;
-	SDL_Texture* AsteroidTexture;
-	int asteroidSize;
 	Vector2 position;
 	Vector2 velocity;
-	Vector2 gravityAcceleration;
+
+	SDL_Texture* rocketTexture;
+
+	double rocketSpeed;
+	
+	double explodeTime;
+	double SpawnTime;
+
 	SDL_Rect rect;
 };

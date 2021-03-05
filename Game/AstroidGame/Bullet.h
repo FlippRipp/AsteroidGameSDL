@@ -20,7 +20,7 @@ public:
 	int size = 12;
 
 private:
-	const double bulletSpeed = 560;
+	const double bulletSpeed = 1000;
 	const double lifeTime = 10;
 	SDL_Rect rect;
 };

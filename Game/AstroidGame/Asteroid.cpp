@@ -1,7 +1,8 @@
 #include "Asteroid.h"
 
-Asteroid::Asteroid()
+Asteroid::Asteroid(SDL_Texture* texture)
 {
+	AsteroidTexture = texture;
 }
 
 Asteroid::~Asteroid()
@@ -24,8 +25,8 @@ void Asteroid::Render(SDL_Renderer * renderer)
 {	
 	rect.x = round(position.x);
 	rect.y = round(position.y);
-	SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
-	SDL_RenderFillRect(renderer, &rect);
+	SDL_RenderCopy(renderer, AsteroidTexture, NULL, &rect);
+
 }
 
 void Asteroid::CollisionCheck(Player * player)

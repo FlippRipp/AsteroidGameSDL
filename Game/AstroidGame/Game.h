@@ -4,8 +4,9 @@ using namespace std;
 #include <iostream>
 #include "Inputs.h"
 #include "Player.h"
-#include "AsteroidController.h"
+#include "HazardController.h"
 #include <SDL_image.h>
+#include <string>
 
 class Game
 {
@@ -20,7 +21,7 @@ public:
 
 	Inputs* inputs;
 	Player* player;
-	AsteroidController* asteroidController;
+	HazardController* asteroidController;
 
 	const double DesiredFps = 60;
 	const double msPerSecond = 1000;	

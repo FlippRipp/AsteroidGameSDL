@@ -37,8 +37,14 @@ void Player::Render(SDL_Renderer * renderer)
 
 	rect.x = round(position.x);
 	rect.y = round(position.y);
+
+	if(texture == nullptr)
+		texture = RenderingUtilities::LoadTexture("Rocket1.png", renderer);
+
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-	SDL_RenderFillRect(renderer, &rect);
+
+	SDL_RenderCopy(renderer, texture , NULL, &rect);
+	//SDL_RenderFillRect(renderer, &rect);
 
 }
 
