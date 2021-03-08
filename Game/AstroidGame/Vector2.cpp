@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <iostream>
 
-Vector2::Vector2(float xValue = 0, float yValue  = 0)
+Vector2::Vector2(double xValue = 0, double yValue  = 0)
 {
 	x = xValue;
 	y = yValue;
@@ -39,6 +39,43 @@ Vector2 Vector2::Clamp(Vector2 pos, Vector2 min, Vector2 max)
 	return pos;
 }
 
+double Vector2::AngleFromDirection(Vector2 direction)
+{
+	return atan2(direction.y, direction.x);
+}
+
+Vector2 Vector2::DirectionFromAngle(double angle)
+{
+	Vector2 dir = Vector2(0,0);
+
+	dir.x = cos(angle);
+	dir.y = sin(angle);
+
+	return dir;
+}
+
+Vector2 Vector2::GetRotatedVector(Vector2 direction, double angle)
+{
+	double angleRad = angle * GameMath::degToRad();
+
+	double cs = cos(angleRad);
+	double sn = sin(angleRad);
+
+	double px = direction.x * cs - direction.y * sn;
+	double py = direction.x * sn + direction.y * cs;
+
+	return Vector2(px, py);
+}
+
+Vector2 Vector2::RotateTowards(Vector2 from, Vector2 to, double speed)
+{
+	double angledifference = Vector2::AngleFromDirection(to) - Vector2::AngleFromDirection(to);
+	if (angledifference > 0) angledifference = 1;
+	else if (angledifference < 0) angledifference = -1;
+
+	return Vector2::GetRotatedVector(from, angledifference * speed);
+}
+
 Vector2 Vector2::Normalized()
 {
 	double magn = Magnitude();
@@ -71,7 +108,7 @@ Vector2 Vector2::Perpendicular(Vector2 vector, bool isClockwise)
 	}
 	else 
 	{
-		return Vector2(vector.y, -vector.x);
+		return Vector2(-vector.y, vector.x);
 	}
 }
 
@@ -83,6 +120,11 @@ Vector2 Vector2::GetDirection(Vector2 from, Vector2 to)
 Vector2 Vector2::GetNormalizedDirection(Vector2 from, Vector2 to)
 {
 	return (to - from).Normalized();
+}
+
+Vector2 Vector2::Lerp(Vector2 from, Vector2 to, double f)
+{
+	return Vector2(GameMath::lerp(from.x, to.x, f), GameMath::lerp(from.y, to.y, f));
 }
 
 void Vector2::Normalize()

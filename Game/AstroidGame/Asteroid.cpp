@@ -25,7 +25,7 @@ void Asteroid::Render(SDL_Renderer * renderer)
 {	
 	rect.x = round(position.x);
 	rect.y = round(position.y);
-	SDL_RenderCopy(renderer, AsteroidTexture, NULL, &rect);
+	SDL_RenderCopyEx(renderer, AsteroidTexture, NULL, &rect, 0, NULL, SDL_FLIP_NONE);
 
 }
 

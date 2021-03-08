@@ -39,27 +39,36 @@ void Player::Render(SDL_Renderer * renderer)
 	rect.y = round(position.y);
 
 	if(texture == nullptr)
-		texture = RenderingUtilities::LoadTexture("Rocket1.png", renderer);
+		texture = RenderingUtilities::LoadTexture("Ressources/PlayerRocket.png", renderer);
 
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
-	SDL_RenderCopy(renderer, texture , NULL, &rect);
-	//SDL_RenderFillRect(renderer, &rect);
+	SDL_RenderCopyEx(renderer, texture , NULL, &rect, 0, NULL, SDL_FLIP_NONE);
+
+	SDL_Rect fuelRect;
+	fuelRect.x = 10;
+	fuelRect.y = screenSize.y - 30;
+	fuelRect.h = 20;
+	fuelRect.w = 100 * boostFuel / boostMaxFuel;
+	SDL_RenderFillRect(renderer, &fuelRect);
 
 }
 
 void Player::UpdatePlayer(Inputs* input, double deltaTime, double time)
 {	
 	bool horizontalMovement = false;
-	if (input->aDown)
+	if (!isGrounded)
 	{
-		horizontalMovement = true;
-		velocity.x = -speed;
-	}
-	if (input->dDown)
-	{
-		horizontalMovement = true;
-		velocity.x = speed;
+		if (input->aDown)
+		{
+			horizontalMovement = true;
+			velocity.x = -speed;
+		}
+		if (input->dDown)
+		{
+			horizontalMovement = true;
+			velocity.x = speed;
+		}
 	}
 
 	if (!horizontalMovement)
@@ -67,14 +76,11 @@ void Player::UpdatePlayer(Inputs* input, double deltaTime, double time)
 		velocity.x = 0;
 	}
 
-	UpdateBoost(time, input);
+	UpdateBoost(deltaTime, input);
 
 	GravityUpdate();
 
 	Move(deltaTime);
-
-
-
 
 	if (input->kDown && time - lastFireTime > timeBetweenBullets)
 	{
@@ -112,25 +118,28 @@ void Player::Shoot()
 	}
 }
 
-void Player::UpdateBoost(double time, Inputs* input)
+void Player::UpdateBoost(double deltatime, Inputs* input)
 {
-	if (input->wDown)
+	if (input->wDown && boostFuel > 0)
 	{
-		if (!isBoosting && isGrounded)
-		{
-			boostStartTime = time;
-			isBoosting = true;
+		
+		isBoosting = true;
+		double extraBoost = 0;
+		if (velocity.y > 0) {
+			extraBoost = velocity.y;
 		}
 
-		if (isBoosting)
-		{
-			if (time - boostStartTime > boostMaxTime)
-			{
-				isBoosting = false;
-			}
+		cout << boostFuel << endl;
 
-			velocity.y -= boostAcceleration;
-		}
+		boostFuel -= boostConsumption * deltatime;
+		velocity.y -= (boostAcceleration + extraBoost);
+	}
+	else if (!input->wDown)
+	{
+		isBoosting = false;
+		cout << "Recharge   " << boostFuel << endl;
+
+		if (boostFuel < boostMaxFuel) boostFuel += boostRecharge * deltatime;
 	}
 	else
 	{
@@ -143,8 +152,9 @@ void Player::GravityUpdate()
 {
 	if ((screenSize.y - rect.h) - position.y < groundClearance)
 	{
-		if (!isGrounded)
+		if (!isGrounded && !isBoosting)
 		{
+			boostFuel = boostMaxFuel;
 			isGrounded = true;
 			velocity.y = 0;
 		}

@@ -102,7 +102,7 @@ void Game::GameLoop() {
 			double newTime = SDL_GetTicks();
 			deltaTime = (newTime - gameTime) / 1000;
 			gameTime = newTime;
-			cout << "deltatime = " << deltaTime << " gametime = " << gameTime << endl;
+			//cout << "deltatime = " << deltaTime << " gametime = " << gameTime << endl;
 			//cout << frameCounter / (gameTime / 1000) << endl;
 			Update();
 			Render();

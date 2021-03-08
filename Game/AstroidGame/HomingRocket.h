@@ -2,6 +2,7 @@
 #include "SDL.h"
 #include "Vector2.h"
 #include <math.h>
+#include "GameMath.h"
 #include <iostream>
 #include "Bullet.h"
 #include "Player.h"
@@ -17,20 +18,28 @@ public:
 
 	void CollisionCheck(Player* player);
 
-	void Init(Vector2 pos, double speed);
+	void Init(Vector2 pos, double speed, Player* player);
 
 	bool isActive = false;
 
 private:
 	Vector2 position;
-	Vector2 velocity;
+	Vector2 debugPosition;
+	Vector2 forwardDirection;
+
+	Vector2 rocketSize = Vector2(50, 50);
 
 	SDL_Texture* rocketTexture;
+
+	double angle;
 
 	double rocketSpeed;
 	
 	double explodeTime;
 	double SpawnTime;
+
+	//Between 0 and 1
+	double turnSpeed = 0.05;
 
 	SDL_Rect rect;
 };

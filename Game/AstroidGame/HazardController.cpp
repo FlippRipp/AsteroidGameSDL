@@ -7,7 +7,7 @@ HazardController::HazardController(double delayStart, double delayDecrease, Play
 	player = p;
 	screenSize = screen;
 	asteroidTexture = RenderingUtilities::LoadTexture("Ressources/Asteroid.png", rend);
-	homingRocketTexture = RenderingUtilities::LoadTexture("HomingRocket.png", rend);
+	homingRocketTexture = RenderingUtilities::LoadTexture("Ressources/HomingRocket.png", rend);
 }
 
 HazardController::~HazardController()
@@ -51,7 +51,11 @@ void HazardController::Update(double deltaTime, double time)
 	{
 		if (homingRockets[i] != NULL)
 		{
-			if (homingRockets[i]->isActive) homingRockets[i]->Update(player, deltaTime, time);
+			if (homingRockets[i]->isActive)
+			{
+				homingRockets[i]->Update(player, deltaTime, time);
+				homingRockets[i]->CollisionCheck(player);
+			}
 		}
 	}
 
@@ -59,7 +63,7 @@ void HazardController::Update(double deltaTime, double time)
 	if (time - lastSpawnTime > asteroidSpawnDelay)
 	{
 		lastSpawnTime = time;
-		spawnAsteroid();
+		spawnHazards();
 	}
 }
 
@@ -90,6 +94,7 @@ void HazardController::spawnHazards()
 	int hazardType = (rand() % 100);
 
 	if (hazardType < 20) {
+		cout << "Will spawn rocket" << endl;
 		spawnRocket();
 	}
 	else if(hazardType < 100)
@@ -148,6 +153,8 @@ void HazardController::spawnRocket()
 {
 	int rocketIndex = -1;
 
+	cout << "Trying to spawn rocket" << endl;
+
 	for (int i = 0; i < homingRocketPoolSize; i++)
 	{
 		if (homingRockets[i] == nullptr)
@@ -165,6 +172,8 @@ void HazardController::spawnRocket()
 	}
 
 	if (rocketIndex == -1) return;
+
+	cout << "Rocket Spawned" << endl;
 
 	int entrySide = rand() % 3;
 
@@ -192,8 +201,8 @@ void HazardController::spawnRocket()
 
 	}
 
-	double speed = rand() % 100 + 50; 
+	double speed = rand() % 300 + 150; 
 
-	homingRockets[rocketIndex]->Init(startPos, speed);
+	homingRockets[rocketIndex]->Init(startPos, speed, player);
 
 }

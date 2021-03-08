@@ -25,7 +25,7 @@ public:
 	int radius = 10;
 private:
 	SDL_Rect rect;	
-	const double speed = 100;
+	const double speed = 200;
 	Vector2 screenSize;
 
 	void UpdateBoost(double time, Inputs* input);
@@ -40,8 +40,10 @@ private:
 	double groundClearance = 2;
 	bool isGrounded = false;
 	const double boostAcceleration = 5;
-	double boostMaxTime = 1.7;
-	double boostStartTime = 0;
+	double boostMaxFuel = 20;
+	double boostFuel = 0;
+	double boostConsumption = 2;
+	double boostRecharge = 1.5;
 	bool isBoosting = false;
 
 	double lastFireTime = 0;

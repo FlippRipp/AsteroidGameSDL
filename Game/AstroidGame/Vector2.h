@@ -1,10 +1,11 @@
 #pragma once
 #include <math.h>
+#include "GameMath.h"
 
 class Vector2
 {
 public:
-	Vector2(float xValue, float yValue);
+	Vector2(double xValue, double yValue);
 	Vector2();
 	~Vector2();
 
@@ -18,8 +19,15 @@ public:
 	static Vector2 GetDirection(Vector2 from, Vector2 to);
 	static Vector2 GetNormalizedDirection(Vector2 from, Vector2 to);
 	static Vector2 Zero(){return Vector2(0,0); }
+	static Vector2 Lerp(Vector2 from, Vector2 to, double f);
 	
 	static Vector2 Clamp(Vector2 pos, Vector2 min, Vector2 max);
+
+	static double AngleFromDirection(Vector2 direction);
+	static Vector2 DirectionFromAngle(double angle);
+
+	static Vector2 GetRotatedVector(Vector2 direction, double angle);
+	static Vector2 RotateTowards(Vector2 from, Vector2 to, double speed);
 
 	Vector2 Normalized();
 	void Normalize();
