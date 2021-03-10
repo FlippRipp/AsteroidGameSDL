@@ -2,8 +2,8 @@
 
 Bullet::Bullet(Vector2 dir,Vector2 startPos)
 {
-	position = Vector2(startPos.x + size / 2, startPos.y);
-	rect.h = rect.w = size;
+	position = Vector2(startPos.x + radius / 2, startPos.y);
+	rect.h = rect.w = radius;
 	direction = dir;
 }
 

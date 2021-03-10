@@ -6,8 +6,9 @@
 #include <iostream>
 #include "Bullet.h"
 #include "Player.h"
+#include "GameObject.h"
 
-class HomingRocket
+class HomingRocket : public GameObject
 {
 public:
 	HomingRocket(SDL_Texture* texture);
@@ -16,14 +17,10 @@ public:
 	void Update(Player * player, double deltaTime, double time);
 	void Render(SDL_Renderer* renderer);
 
-	void CollisionCheck(Player* player);
+	void OnCollision();
 
 	void Init(Vector2 pos, double speed, Player* player);
-
-	bool isActive = false;
-
 private:
-	Vector2 position;
 	Vector2 debugPosition;
 	Vector2 forwardDirection;
 

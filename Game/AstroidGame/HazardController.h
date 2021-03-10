@@ -2,16 +2,16 @@
 #include "Asteroid.h"
 #include "HomingRocket.h"
 #include "Player.h"
+#include "Collision2D.h"
 
 class HazardController
 {
 public:
-	HazardController(double delayStart, double delayDecrease, Player* p, Vector2 screen, SDL_Renderer* rend);
+	HazardController(double delayStart, double delayDecrease, Player* p, Vector2 screen, SDL_Renderer* rend, Collision2D* col);
 	~HazardController();
 
 	void Update(double deltaTime, double time);
 	void Render(SDL_Renderer* renderer);
-	
 
 private:
 
@@ -28,6 +28,8 @@ private:
 	Player* player;
 
 	Vector2 screenSize;
+
+	Collision2D* collisionSystem;
 
 	SDL_Texture* asteroidTexture;
 	SDL_Texture* homingRocketTexture;

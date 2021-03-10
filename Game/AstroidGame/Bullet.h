@@ -4,8 +4,9 @@
 #include "Vector2.h"
 #include <math.h>
 #include <iostream>
+#include "GameObject.h"
 
-class Bullet
+class Bullet : public GameObject
 {
 public:
 	Bullet(Vector2 dir, Vector2 startPos);
@@ -13,11 +14,8 @@ public:
 
 	void Render(SDL_Renderer* renderer);
 	void Update(double deltaTime);
-	bool isActive = false;
 	Vector2 direction;
-	Vector2 position;
 	double lifeTimer = 0;
-	int size = 12;
 
 private:
 	const double bulletSpeed = 1000;

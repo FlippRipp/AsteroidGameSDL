@@ -45,8 +45,12 @@ Game::Game(const char* title, int resX, int resY, bool fullscreen)
 	}
 
 	inputs = new Inputs();
-	player = new Player(Vector2(resX / 2, resY / 2), Vector2(50, 50), Vector2(resX, resY));
-	asteroidController = new HazardController(1 , 0.001, player, Vector2(resX, resY), renderer);
+	collsionSystem = new Collision2D(Vector2(resX, resY));
+	player = new Player(Vector2(resX / 2, resY / 2), Vector2(50, 50), Vector2(resX, resY), 25);
+	hazardController = new HazardController(1 , 0.001, player, Vector2(resX, resY), renderer, collsionSystem);
+
+	collsionSystem->AddCollider(new GameObject(Vector2(-200, 0), 0));
+	collsionSystem->AddCollider(player);
 }
 
 Game::~Game()
@@ -56,11 +60,11 @@ Game::~Game()
 void Game::Update()
 {
 
-	//cout << frameCounter << endl;
+	cout << 1 / deltaTime << endl;
 	inputs->UpdateInputs();
 	player->UpdatePlayer(inputs,deltaTime, GetTimeSec());
-	asteroidController->Update(deltaTime, GetTimeSec());
-
+	hazardController->Update(deltaTime, GetTimeSec());
+	collsionSystem->Update();
 	if (inputs->quitPressed)
 	{
 		isRunning = false;
@@ -71,7 +75,7 @@ void Game::Render()
 {
 	SDL_RenderClear(renderer);
 	player->Render(renderer);
-	asteroidController->Render(renderer);
+	hazardController->Render(renderer);
 	//render stuff here	
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderPresent(renderer);
@@ -111,7 +115,7 @@ void Game::GameLoop() {
 
 	delete player;
 	delete inputs;
-	delete asteroidController;
+	delete hazardController;
 
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);

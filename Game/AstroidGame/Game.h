@@ -7,6 +7,7 @@ using namespace std;
 #include "HazardController.h"
 #include <SDL_image.h>
 #include <string>
+#include "Collision2D.h"
 
 class Game
 {
@@ -21,7 +22,7 @@ public:
 
 	Inputs* inputs;
 	Player* player;
-	HazardController* asteroidController;
+	HazardController* hazardController;
 
 	const double DesiredFps = 60;
 	const double msPerSecond = 1000;	
@@ -35,6 +36,7 @@ private:
 	double accumilator = 0;
 	double cycleTime;
 	double independedGameTime;	
+	Collision2D* collsionSystem;
 	
 	bool isRunning = true;
 };

@@ -5,29 +5,27 @@
 #include <iostream>
 #include "Bullet.h"
 #include "Player.h"
+#include "GameObject.h"
 
-class Asteroid
+class Asteroid : public GameObject
 {
 public:
 	Asteroid(SDL_Texture* texture);
 	~Asteroid();
 
+	void OnCollision();
+
 	void Update(double deltaTime);
 	void Render(SDL_Renderer* renderer);
 
-	void CollisionCheck(Player* player);
-
 	void Init(Vector2 pos, Vector2 vel, Vector2 gravityAccel, int size);
-
-	bool isActive = false;
 
 private:
 	double lifeTimer = 0;
 	double lifeTime = 10;
 	SDL_Texture* AsteroidTexture;
-	int asteroidSize;
-	Vector2 position;
 	Vector2 velocity;
 	Vector2 gravityAcceleration;
 	SDL_Rect rect;
+	bool test;
 };

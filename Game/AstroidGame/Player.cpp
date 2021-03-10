@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(Vector2 startPos, Vector2 size, Vector2 screenS, int radius)
+Player::Player(Vector2 startPos, Vector2 size, Vector2 screenS, double rad)
 {
 	rect = SDL_Rect();
 	rect.x = startPos.x;
@@ -8,7 +8,11 @@ Player::Player(Vector2 startPos, Vector2 size, Vector2 screenS, int radius)
 	rect.w = size.x;
 	rect.h = size.y;
 
-	if(radius = 0) radius = std::fmin(size.x, size.y);
+	radius = rad;
+
+	isActive = true;
+
+	if(radius == 0) radius = std::fmin(size.x, size.y);
 
 	position = startPos;
 	screenSize = screenS;
@@ -51,6 +55,13 @@ void Player::Render(SDL_Renderer * renderer)
 	fuelRect.h = 20;
 	fuelRect.w = 100 * boostFuel / boostMaxFuel;
 	SDL_RenderFillRect(renderer, &fuelRect);
+
+	SDL_Rect debugRect;
+	debugRect.x = position.x;
+	debugRect.y = position.y;
+	debugRect.w = radius * 2;
+	debugRect.h = radius * 2;
+	//SDL_RenderFillRect(renderer, &debugRect);
 
 }
 
@@ -110,7 +121,7 @@ void Player::Shoot()
 		else if (!bulletList[i]->isActive)
 		{
 			bulletList[i]->isActive = true;
-			bulletList[i]->position = Vector2(position.x + rect.w / 2 - bulletList[i]->size / 2, position.y);
+			bulletList[i]->position = Vector2(position.x + rect.w / 2 - bulletList[i]->radius / 2, position.y);
 			bulletList[i]->direction = Vector2(0, -1);
 			bulletList[i]->lifeTimer = 0;
 			break;
@@ -129,7 +140,7 @@ void Player::UpdateBoost(double deltatime, Inputs* input)
 			extraBoost = velocity.y;
 		}
 
-		cout << boostFuel << endl;
+		//cout << boostFuel << endl;
 
 		boostFuel -= boostConsumption * deltatime;
 		velocity.y -= (boostAcceleration + extraBoost);
@@ -137,7 +148,7 @@ void Player::UpdateBoost(double deltatime, Inputs* input)
 	else if (!input->wDown)
 	{
 		isBoosting = false;
-		cout << "Recharge   " << boostFuel << endl;
+		//cout << "Recharge   " << boostFuel << endl;
 
 		if (boostFuel < boostMaxFuel) boostFuel += boostRecharge * deltatime;
 	}

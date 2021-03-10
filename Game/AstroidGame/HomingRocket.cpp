@@ -6,6 +6,7 @@ HomingRocket::HomingRocket(SDL_Texture* texture)
 	rocketTexture = texture;
 	rect.h = rocketSize.y;
 	rect.w = rocketSize.x;
+	radius = rocketSize.x / 2;
 }
 
 HomingRocket::~HomingRocket()
@@ -14,7 +15,7 @@ HomingRocket::~HomingRocket()
 
 void HomingRocket::Update(Player * player, double deltaTime, double time)
 {
-	if (Vector2::Distance(position, player->position) > 10)
+	if (Vector2::Distance(position, player->position) > 1)
 	{
 		forwardDirection = Vector2::Lerp(forwardDirection, Vector2::GetNormalizedDirection(position, player->position), turnSpeed);
 
@@ -28,10 +29,6 @@ void HomingRocket::Update(Player * player, double deltaTime, double time)
 
 		position += forwardDirection * rocketSpeed * deltaTime;
 	}
-	else
-	{
-		//Go Boom
-	}
 }
 
 void HomingRocket::Render(SDL_Renderer * renderer)
@@ -41,45 +38,16 @@ void HomingRocket::Render(SDL_Renderer * renderer)
 	SDL_RenderCopyEx(renderer, rocketTexture, NULL, &rect, angle * GameMath::radToDeg() + 90, NULL, SDL_FLIP_NONE);
 
 	SDL_Rect debugRect;
-	debugRect.x = debugPosition.x;
-	debugRect.y = debugPosition.y;
-	debugRect.w = 5;
-	debugRect.h = 5;
-	SDL_RenderFillRect(renderer, &debugRect);
+	debugRect.x = position.x;
+	debugRect.y = position.y;
+	debugRect.w = radius * 2;
+	debugRect.h = radius * 2;
+	//SDL_RenderFillRect(renderer, &debugRect);
 }
 
-void HomingRocket::CollisionCheck(Player * player)
+void HomingRocket::OnCollision()
 {
-	if (Vector2::Distance(Vector2(position.x + rocketSize.x / 2, position.y + rocketSize.y / 2)
-		, Vector2(player->position.x + player->radius, player->position.y + player->radius))
-		< 10 + player->radius)
-	{
-		isActive = false;
-	}
-
-	for (int i = 0; i < player->BulletPoolSize; i++)
-	{
-		Bullet* bullet;
-
-		if (player->bulletList[i] != nullptr)
-		{
-			if (player->bulletList[i]->isActive) bullet = player->bulletList[i];
-			else continue;
-		}
-		else continue;
-
-
-
-		if (Vector2::Distance(Vector2(position.x + rocketSize.x / 2, position.y + rocketSize.y / 2)
-			, Vector2(bullet->position.x + bullet->size / 2, bullet->position.y + bullet->size / 2))
-			< 50 / 2 + bullet->size / 2)
-		{
-			isActive = false;
-			bullet->isActive = false;
-		}
-
-	}
-
+	isActive = false;
 }
 
 void HomingRocket::Init(Vector2 pos, double speed, Player* player)

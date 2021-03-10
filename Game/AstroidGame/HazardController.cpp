@@ -1,11 +1,12 @@
 #include "HazardController.h"
 
-HazardController::HazardController(double delayStart, double delayDecrease, Player* p, Vector2 screen, SDL_Renderer* rend)
+HazardController::HazardController(double delayStart, double delayDecrease, Player* p, Vector2 screen, SDL_Renderer* rend, Collision2D* col)
 {
 	asteroidSpawnDelay = delayStart;
 	asteroidSpawnDecrease = delayDecrease;
 	player = p;
 	screenSize = screen;
+	collisionSystem = col;
 	asteroidTexture = RenderingUtilities::LoadTexture("Ressources/Asteroid.png", rend);
 	homingRocketTexture = RenderingUtilities::LoadTexture("Ressources/HomingRocket.png", rend);
 }
@@ -41,7 +42,6 @@ void HazardController::Update(double deltaTime, double time)
 			if (asteroids[i]->isActive) 
 			{
 				asteroids[i]->Update(deltaTime);
-				asteroids[i]->CollisionCheck(player);
 			}
 		}
 	}
@@ -54,7 +54,6 @@ void HazardController::Update(double deltaTime, double time)
 			if (homingRockets[i]->isActive)
 			{
 				homingRockets[i]->Update(player, deltaTime, time);
-				homingRockets[i]->CollisionCheck(player);
 			}
 		}
 	}
@@ -113,6 +112,9 @@ void HazardController::spawnAsteroid()
 		if (asteroids[i] == nullptr)
 		{
 			asteroids[i] = new Asteroid(asteroidTexture);
+
+			//collisionSystem->AddCollider(asteroids[i], asteroids[i]->GetOnCollision);
+			collisionSystem->AddCollider(asteroids[i]);
 			asteroidIndex = i;
 
 			break;
@@ -160,6 +162,8 @@ void HazardController::spawnRocket()
 		if (homingRockets[i] == nullptr)
 		{
 			homingRockets[i] = new HomingRocket(homingRocketTexture);
+			collisionSystem->AddCollider(homingRockets[i]);
+
 			rocketIndex = i;
 
 			break;
