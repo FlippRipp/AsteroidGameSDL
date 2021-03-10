@@ -95,6 +95,7 @@ void Collision2D::Update()
 	{
 		GameObject* obj = colliders[i];
 		Vector2 pos = obj->GetRealPosition();
+		double objRadius = obj->radius;
 
 		if (!obj->isActive) continue;
 
@@ -122,14 +123,19 @@ void Collision2D::Update()
 				GameObject* collider = collisionGrid[obj->collisionCellIndex].collidersInCell[j];
 
 				if (collider != obj)
-				{
-					
+				{					
 					if (!collider->isActive) continue;
 
-					if (Vector2::Distance(obj->GetRealPosition(), collider->GetRealPosition()) < obj->radius + collider->radius)
+					Vector2 colliderPos = collider->GetRealPosition();
+					double colliderRadius = collider->radius;
+
+					//overlap circle
+					if (fabs((pos.x - colliderPos.x) * (pos.x - colliderPos.x) 
+						+ (pos.y - colliderPos.y) * (pos.y - colliderPos.y)) 
+						<= (obj->radius + colliderRadius) * (obj->radius + colliderRadius))
 					{
-							obj->OnCollision();
-							collider->OnCollision();
+						obj->OnCollision();
+						collider->OnCollision();
 					}
 				}
 			}
@@ -140,18 +146,21 @@ void Collision2D::Update()
 
 				int neighboorIndex = collisionGrid[obj->collisionCellIndex].neighboorsIndex[j];
 
-
-
 				if (neighboorIndex == -1) continue;
 
 				for (int k = 0; k < collisionGrid[neighboorIndex].collidersInCell.size(); k++)
 				{
 
 					GameObject* colliderObj = collisionGrid[neighboorIndex].collidersInCell[k];
+					Vector2 colliderPos = colliderObj->GetRealPosition();
+					double colliderRadius = colliderObj->radius;
 
 					if (!colliderObj->isActive) continue;
 
-					if (Vector2::Distance(pos, colliderObj->GetRealPosition()) < obj->radius + colliderObj->radius)
+					//overlap circle
+					if (fabs((pos.x - colliderPos.x) * (pos.x - colliderPos.x)
+						+ (pos.y - colliderPos.y) * (pos.y - colliderPos.y))
+						<= (obj->radius + colliderRadius) * (obj->radius + colliderRadius))
 					{
 						obj->OnCollision();
 						colliderObj->OnCollision();
