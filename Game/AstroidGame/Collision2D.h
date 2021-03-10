@@ -35,6 +35,7 @@ public:
 private:
 
 	std::vector<GameObject*> colliders;
+
 	std::vector<CollsionGridCell> collisionGrid;
 	double GridSize = 60;
 

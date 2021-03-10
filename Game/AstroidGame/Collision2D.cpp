@@ -3,8 +3,10 @@
 Collision2D::Collision2D(Vector2 screenS)
 {
 	screenSize = screenS;
+
 	gridCountX = ceil(screenSize.x / GridSize);
 	gridCountY = ceil(screenSize.y / GridSize);
+
 	int collisionGridSize = gridCountX * gridCountY;
 
 	std::cout << collisionGridSize - 1 << " gridXMAX: " << gridCountX << " gridYMAX: " << gridCountY << std::endl;
@@ -12,9 +14,6 @@ Collision2D::Collision2D(Vector2 screenS)
 	for (int i = 0; i < collisionGridSize; i++)
 	{
 		collisionGrid.push_back(CollsionGridCell());
-	}
-	for (int i = 0; i < collisionGridSize; i++)
-	{
 		int y = floor(i / gridCountX);
 		int x = i - y * gridCountX;
 
@@ -22,7 +21,7 @@ Collision2D::Collision2D(Vector2 screenS)
 		if (x - 1 >= 0 && y - 1 >= 0) collisionGrid[i].neighboorsIndex[0] = (x - 1) + (y - 1) * gridCountX;
 		else collisionGrid[i].neighboorsIndex[0] = -1;
 		//Upper middle
-		if (y - 1 >= 0) collisionGrid[i].neighboorsIndex[1] = (x) + (y - 1) * gridCountX;
+		if (y - 1 >= 0) collisionGrid[i].neighboorsIndex[1] = (x)+(y - 1) * gridCountX;
 		else collisionGrid[i].neighboorsIndex[1] = -1;
 		//Upper Right
 		if (x + 1 < gridCountX && y - 1 >= 0) collisionGrid[i].neighboorsIndex[2] = (x + 1) + (y - 1) * gridCountX;
@@ -34,23 +33,23 @@ Collision2D::Collision2D(Vector2 screenS)
 		if (x + 1 < gridCountX && y + 1 < gridCountY) collisionGrid[i].neighboorsIndex[4] = (x + 1) + (y + 1) * gridCountX;
 		else collisionGrid[i].neighboorsIndex[4] = -1;
 		//Lower Middle
-		if ( y + 1 < gridCountY) collisionGrid[i].neighboorsIndex[5] = (x)+(y + 1) * gridCountX;
+		if (y + 1 < gridCountY) collisionGrid[i].neighboorsIndex[5] = (x)+(y + 1) * gridCountX;
 		else collisionGrid[i].neighboorsIndex[5] = -1;
 		//Lower Left
 		if (x - 1 >= 0 && y + 1 < gridCountY) collisionGrid[i].neighboorsIndex[6] = (x - 1) + (y + 1) * gridCountX;
 		else collisionGrid[i].neighboorsIndex[6] = -1;
 		//Left
-		if (x - 1 >= 0) collisionGrid[i].neighboorsIndex[7] = (x - 1) + (y) * gridCountX;
+		if (x - 1 >= 0) collisionGrid[i].neighboorsIndex[7] = (x - 1) + (y)* gridCountX;
 		else collisionGrid[i].neighboorsIndex[7] = -1;
 
-		//std::cout << "index: " << i << " X: " << x << " Y: " << y << std::endl;
-		//std::cout << "1: " << collisionGrid[i].neighboorsIndex[0] << " 2: " << collisionGrid[i].neighboorsIndex[1] << std::endl;
-		//std::cout << "3: " << collisionGrid[i].neighboorsIndex[2] << " 4: " << collisionGrid[i].neighboorsIndex[3] << std::endl;
-		//std::cout << "5: " << collisionGrid[i].neighboorsIndex[4] << " 6: " << collisionGrid[i].neighboorsIndex[5] << std::endl;
-		//std::cout << "7: " << collisionGrid[i].neighboorsIndex[6] << " 8: " << collisionGrid[i].neighboorsIndex[7] << std::endl;
-		//std::cout << std::endl;
-	}
 
+		//std::cout << "index: " << i << " X: " << x << " Y: " << y << std::endl;
+//std::cout << "1: " << collisionGrid[i].neighboorsIndex[0] << " 2: " << collisionGrid[i].neighboorsIndex[1] << std::endl;
+//std::cout << "3: " << collisionGrid[i].neighboorsIndex[2] << " 4: " << collisionGrid[i].neighboorsIndex[3] << std::endl;
+//std::cout << "5: " << collisionGrid[i].neighboorsIndex[4] << " 6: " << collisionGrid[i].neighboorsIndex[5] << std::endl;
+//std::cout << "7: " << collisionGrid[i].neighboorsIndex[6] << " 8: " << collisionGrid[i].neighboorsIndex[7] << std::endl;
+//std::cout << std::endl;
+	}
 	//(x,y)
 //(-1,1) index - gridcountx - 1
 //(0,1) index - gridcountx
@@ -114,8 +113,6 @@ void Collision2D::Update()
 				obj->collisionCellX = gridX;
 				obj->collisionCellY = gridY;
 				obj->collisionCellIndex = index;
-
-
 			}
 
 
@@ -128,11 +125,12 @@ void Collision2D::Update()
 				{
 					
 					if (!collider->isActive) continue;
+
 					if (Vector2::Distance(obj->GetRealPosition(), collider->GetRealPosition()) < obj->radius + collider->radius)
-						{
+					{
 							obj->OnCollision();
 							collider->OnCollision();
-						}
+					}
 				}
 			}
 
@@ -152,8 +150,6 @@ void Collision2D::Update()
 					GameObject* colliderObj = collisionGrid[neighboorIndex].collidersInCell[k];
 
 					if (!colliderObj->isActive) continue;
-
-
 
 					if (Vector2::Distance(pos, colliderObj->GetRealPosition()) < obj->radius + colliderObj->radius)
 					{
