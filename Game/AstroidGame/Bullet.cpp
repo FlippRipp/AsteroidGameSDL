@@ -1,7 +1,8 @@
 #include "Bullet.h"
 
-Bullet::Bullet(Vector2 dir,Vector2 startPos)
+Bullet::Bullet(Vector2 dir,Vector2 startPos, std::vector<GameObject::CollisionLayers> collisionLayers)
 {
+	SetCollisionMatrix(collisionLayers);
 	position = Vector2(startPos.x + radius / 2, startPos.y);
 	rect.h = rect.w = radius;
 	direction = dir;

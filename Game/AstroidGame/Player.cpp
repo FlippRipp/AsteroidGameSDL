@@ -1,7 +1,8 @@
 #include "Player.h"
 
-Player::Player(Vector2 startPos, Vector2 size, Vector2 screenS, double rad)
+Player::Player(Vector2 startPos, Vector2 size, Vector2 screenS, double rad, std::vector<GameObject::CollisionLayers> collisionLayers)
 {
+	SetCollisionMatrix(collisionLayers);
 	rect = SDL_Rect();
 	rect.x = startPos.x;
 	rect.y = startPos.y;

@@ -10,7 +10,7 @@
 class Asteroid : public GameObject
 {
 public:
-	Asteroid(SDL_Texture* texture);
+	Asteroid(SDL_Texture* texture, std::vector<GameObject::CollisionLayers> collisionLayers);
 	~Asteroid();
 
 	void OnCollision();

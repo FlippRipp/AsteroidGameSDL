@@ -125,6 +125,7 @@ void Collision2D::Update()
 				if (collider != obj)
 				{					
 					if (!collider->isActive) continue;
+					if (!CheckCollisionMatrix(collider->layer, obj->collisionMatrix)) continue;
 
 					Vector2 colliderPos = collider->GetRealPosition();
 					double colliderRadius = collider->radius;
@@ -156,6 +157,7 @@ void Collision2D::Update()
 					double colliderRadius = colliderObj->radius;
 
 					if (!colliderObj->isActive) continue;
+					if (!CheckCollisionMatrix(colliderObj->layer,obj->collisionMatrix)) continue;				
 
 					//overlap circle
 					if (fabs((pos.x - colliderPos.x) * (pos.x - colliderPos.x)
@@ -170,4 +172,9 @@ void Collision2D::Update()
 			}
 		}
 	}
+}
+
+bool Collision2D::CheckCollisionMatrix(int layer, int collsionMatrix)
+{
+	return (collsionMatrix >> layer) & 1;
 }

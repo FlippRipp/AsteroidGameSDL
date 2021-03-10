@@ -31,6 +31,7 @@ public:
 	void AddCollider(GameObject* objectToAdd);
 	void RemoveCollider(GameObject* objectToRemove);
 	void Update();
+	bool CheckCollisionMatrix(int layer,int collsionMatrix);
 
 private:
 

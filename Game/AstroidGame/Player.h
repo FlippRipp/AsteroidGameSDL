@@ -11,7 +11,7 @@
 class Player : public GameObject
 {
 public:
-	Player(Vector2 startPos, Vector2 size, Vector2 screenS, double rad = 0);
+	Player(Vector2 startPos, Vector2 size, Vector2 screenS, double rad, std::vector<GameObject::CollisionLayers> collisionLayers);
 	~Player();
 
 	void Render(SDL_Renderer* renderer);

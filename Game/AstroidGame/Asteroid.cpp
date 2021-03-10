@@ -1,7 +1,8 @@
 #include "Asteroid.h"
 
-Asteroid::Asteroid(SDL_Texture* texture)
+Asteroid::Asteroid(SDL_Texture* texture, std::vector<GameObject::CollisionLayers> collisionLayers)
 {
+	SetCollisionMatrix(collisionLayers);
 	AsteroidTexture = texture;
 }
 
