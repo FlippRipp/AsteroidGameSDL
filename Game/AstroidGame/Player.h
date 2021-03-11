@@ -7,11 +7,15 @@
 #include "Bullet.h"
 #include "RenderingUtilities.h"
 #include "GameObject.h"
+#include "Collision2D.h"
 
 class Player : public GameObject
 {
 public:
-	Player(Vector2 startPos, Vector2 size, Vector2 screenS, double rad, std::vector<GameObject::CollisionLayers> collisionLayers);
+	Player(Vector2 startPos, Vector2 size, Vector2 screenS, double rad, 
+		std::vector<GameObject::CollisionLayers> collisionLayers, 
+		CollisionLayers layer, Collision2D* cS);
+
 	~Player();
 
 	void Render(SDL_Renderer* renderer);
@@ -20,6 +24,8 @@ public:
 	
 	static const int BulletPoolSize = 1000;
 	Bullet* bulletList[BulletPoolSize] = { };
+
+	Collision2D* collisionSystem;
 private:
 
 	SDL_Rect rect;	

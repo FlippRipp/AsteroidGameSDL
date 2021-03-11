@@ -11,7 +11,7 @@
 class HomingRocket : public GameObject
 {
 public:
-	HomingRocket(SDL_Texture* texture, vector<GameObject::CollisionLayers> collisionLayers);
+	HomingRocket(SDL_Texture* texture, vector<GameObject::CollisionLayers> collisionLayers, CollisionLayers layer);
 	~HomingRocket();
 
 	void Update(Player * player, double deltaTime, double time);

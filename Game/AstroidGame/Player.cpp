@@ -1,8 +1,12 @@
 #include "Player.h"
 
-Player::Player(Vector2 startPos, Vector2 size, Vector2 screenS, double rad, std::vector<GameObject::CollisionLayers> collisionLayers)
+Player::Player(Vector2 startPos, Vector2 size, Vector2 screenS, double rad, 
+	std::vector<GameObject::CollisionLayers> collisionLayers, 
+	CollisionLayers l, Collision2D* cS)
 {
+	collisionSystem = cS;
 	SetCollisionMatrix(collisionLayers);
+	layer = l;
 	rect = SDL_Rect();
 	rect.x = startPos.x;
 	rect.y = startPos.y;
@@ -57,11 +61,11 @@ void Player::Render(SDL_Renderer * renderer)
 	fuelRect.w = 100 * boostFuel / boostMaxFuel;
 	SDL_RenderFillRect(renderer, &fuelRect);
 
-	SDL_Rect debugRect;
-	debugRect.x = position.x;
-	debugRect.y = position.y;
-	debugRect.w = radius * 2;
-	debugRect.h = radius * 2;
+	//SDL_Rect debugRect;
+	//debugRect.x = position.x;
+	//debugRect.y = position.y;
+	//debugRect.w = radius * 2;
+	//debugRect.h = radius * 2;
 	//SDL_RenderFillRect(renderer, &debugRect);
 
 }
@@ -116,13 +120,18 @@ void Player::Shoot()
 	{
 		if (bulletList[i] == nullptr)
 		{
-			bulletList[i] = new Bullet(Vector2(0, -1), Vector2(position.x + rect.w / 2, position.y));
+			bulletList[i] = new Bullet(Vector2(0, -1), Vector2(position.x + rect.w / 2, position.y), 10, 
+				std::vector<CollisionLayers>{ rockets, asteroids }, bullet);
+
+			collisionSystem->AddCollider(bulletList[i]);
+			//cout << "true" << endl;
 			break;
 		}
 		else if (!bulletList[i]->isActive)
 		{
 			bulletList[i]->isActive = true;
 			bulletList[i]->position = Vector2(position.x + rect.w / 2 - bulletList[i]->radius / 2, position.y);
+			//cout << "true" << endl;
 			bulletList[i]->direction = Vector2(0, -1);
 			bulletList[i]->lifeTimer = 0;
 			break;

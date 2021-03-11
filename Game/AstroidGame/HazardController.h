@@ -19,10 +19,10 @@ private:
 	void spawnAsteroid();
 	void spawnRocket();
 
-	static const int asteroidPoolSize = 200;
+	static const int asteroidPoolSize = 1000;
 	Asteroid* asteroids[asteroidPoolSize];
 
-	static const int homingRocketPoolSize = 200;
+	static const int homingRocketPoolSize = 1000;
 	HomingRocket* homingRockets[homingRocketPoolSize];
 
 	Player* player;

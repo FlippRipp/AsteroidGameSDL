@@ -1,9 +1,10 @@
 #include "HomingRocket.h"
 
 //57.295779512896171867977148875518
-HomingRocket::HomingRocket(SDL_Texture* texture,vector<GameObject::CollisionLayers> collisionLayers)
+HomingRocket::HomingRocket(SDL_Texture* texture,vector<GameObject::CollisionLayers> collisionLayers, CollisionLayers l)
 {
 	SetCollisionMatrix(collisionLayers);
+	layer = l;
 	rocketTexture = texture;
 	rect.h = rocketSize.y;
 	rect.w = rocketSize.x;

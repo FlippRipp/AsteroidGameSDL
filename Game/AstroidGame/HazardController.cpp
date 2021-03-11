@@ -111,7 +111,8 @@ void HazardController::spawnAsteroid()
 	{
 		if (asteroids[i] == nullptr)
 		{
-			asteroids[i] = new Asteroid(asteroidTexture);
+			asteroids[i] = new Asteroid(asteroidTexture, 
+				std::vector<GameObject::CollisionLayers>{ GameObject::rockets, GameObject::player, GameObject::bullet }, GameObject::asteroids);
 
 			//collisionSystem->AddCollider(asteroids[i], asteroids[i]->GetOnCollision);
 			collisionSystem->AddCollider(asteroids[i]);
@@ -161,7 +162,7 @@ void HazardController::spawnRocket()
 	{
 		if (homingRockets[i] == nullptr)
 		{
-			homingRockets[i] = new HomingRocket(homingRocketTexture);
+			homingRockets[i] = new HomingRocket(homingRocketTexture, std::vector<GameObject::CollisionLayers>{ GameObject::asteroids, GameObject::player, GameObject::bullet }, GameObject::rockets);
 			collisionSystem->AddCollider(homingRockets[i]);
 
 			rocketIndex = i;
