@@ -86,6 +86,7 @@ void Player::Render(SDL_Renderer * renderer)
 
 void Player::UpdatePlayer(Inputs* input, double deltaTime, double time)
 {	
+	framesSinceLastHit++;
 	if (lives <= 0)
 	{
 		input->quitPressed = true;
@@ -133,7 +134,11 @@ void Player::UpdatePlayer(Inputs* input, double deltaTime, double time)
 
 void Player::OnCollision()
 {
-	lives--;
+	if (framesSinceLastHit > invincibilityframes)
+	{
+		framesSinceLastHit = 0;
+		lives--;
+	}
 }
 
 void Player::Shoot()

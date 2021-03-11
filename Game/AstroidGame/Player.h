@@ -57,5 +57,8 @@ private:
 	double lastFireTime = 0;
 	double timeBetweenBullets = 0.2f;
 
+	int invincibilityframes = 20;
+	int framesSinceLastHit = 0;
+
 	SDL_Texture* texture;
 };
