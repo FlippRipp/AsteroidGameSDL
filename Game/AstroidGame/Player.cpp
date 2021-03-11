@@ -61,6 +61,20 @@ void Player::Render(SDL_Renderer * renderer)
 	fuelRect.w = 100 * boostFuel / boostMaxFuel;
 	SDL_RenderFillRect(renderer, &fuelRect);
 
+	SDL_Rect lifeRect;
+	lifeRect.x = 10;
+	lifeRect.y = screenSize.y - 60;
+	lifeRect.h = 20;
+	lifeRect.w = 20;
+
+	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+
+	for (int i = 0; i < lives; i++)
+	{
+		SDL_RenderFillRect(renderer, &lifeRect);
+		lifeRect.x += 40;
+	}
+
 	//SDL_Rect debugRect;
 	//debugRect.x = position.x;
 	//debugRect.y = position.y;
@@ -72,6 +86,10 @@ void Player::Render(SDL_Renderer * renderer)
 
 void Player::UpdatePlayer(Inputs* input, double deltaTime, double time)
 {	
+	if (lives <= 0)
+	{
+		input->quitPressed = true;
+	}
 	bool horizontalMovement = false;
 	if (!isGrounded)
 	{
@@ -113,6 +131,11 @@ void Player::UpdatePlayer(Inputs* input, double deltaTime, double time)
 	}
 }
 
+void Player::OnCollision()
+{
+	lives--;
+}
+
 void Player::Shoot()
 {
 	
@@ -120,10 +143,11 @@ void Player::Shoot()
 	{
 		if (bulletList[i] == nullptr)
 		{
-			bulletList[i] = new Bullet(Vector2(0, -1), Vector2(position.x + rect.w / 2, position.y), 10, 
+			bulletList[i] = new Bullet(Vector2(0, -1), Vector2(position.x + rect.w / 2, position.y), 10,
 				std::vector<CollisionLayers>{ rockets, asteroids }, bullet);
 
 			collisionSystem->AddCollider(bulletList[i]);
+
 			//cout << "true" << endl;
 			break;
 		}

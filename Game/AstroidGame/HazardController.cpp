@@ -1,14 +1,16 @@
 #include "HazardController.h"
 
-HazardController::HazardController(double delayStart, double delayDecrease, Player* p, Vector2 screen, SDL_Renderer* rend, Collision2D* col)
+HazardController::HazardController(double delayStart, Player* p, Vector2 screen, SDL_Renderer* rend, Collision2D* col)
 {
-	asteroidSpawnDelay = delayStart;
-	asteroidSpawnDecrease = delayDecrease;
+
+	nextDifficultyIncreaseTime = difficultyIncreaseIntervals;
+	hazardSpawnDelay = delayStart;
 	player = p;
 	screenSize = screen;
 	collisionSystem = col;
 	asteroidTexture = RenderingUtilities::LoadTexture("Ressources/Asteroid.png", rend);
 	homingRocketTexture = RenderingUtilities::LoadTexture("Ressources/HomingRocket.png", rend);
+	rollingStoneTexture = RenderingUtilities::LoadTexture("Ressources/RollingStones.png", rend);
 }
 
 HazardController::~HazardController()
@@ -34,6 +36,12 @@ HazardController::~HazardController()
 
 void HazardController::Update(double deltaTime, double time)
 {
+
+	if (time > nextDifficultyIncreaseTime && hazardSpawnDelay - difficultySpawntimeDecrease > minSpawnDelay)
+	{
+		nextDifficultyIncreaseTime = time + difficultyIncreaseIntervals;
+		hazardSpawnDelay -= difficultySpawntimeDecrease;
+	}
 	//Update Asteroids
 	for (int i = 0; i < asteroidPoolSize; i++)
 	{
@@ -43,6 +51,14 @@ void HazardController::Update(double deltaTime, double time)
 			{
 				asteroids[i]->Update(deltaTime);
 			}
+		}
+	}
+
+	for (int i = 0; i < rollingStonePoolSize; i++)
+	{
+		if (rollingStones[i] != NULL)
+		{
+			if (rollingStones[i]->isActive) rollingStones[i]->Update(deltaTime, time, screenSize);
 		}
 	}
 
@@ -59,7 +75,7 @@ void HazardController::Update(double deltaTime, double time)
 	}
 
 	//Spawn Hazards
-	if (time - lastSpawnTime > asteroidSpawnDelay)
+	if (time - lastSpawnTime > hazardSpawnDelay)
 	{
 		lastSpawnTime = time;
 		spawnHazards();
@@ -85,20 +101,32 @@ void HazardController::Render(SDL_Renderer * renderer)
 			if (homingRockets[i]->isActive) homingRockets[i]->Render(renderer);
 		}
 	}
+
+	for (int i = 0; i < rollingStonePoolSize; i++)
+	{
+		if (rollingStones[i] != NULL)
+		{
+			if (rollingStones[i]->isActive) rollingStones[i]->Render(renderer);
+		}
+	}
 }
 
 //Spawn Hazards
 void HazardController::spawnHazards()
 {
-	int hazardType = (rand() % 100);
+	int hazardType = (GetRandom(0, 100) );
 
-	if (hazardType < 20) {
-		cout << "Will spawn rocket" << endl;
+	if (hazardType < 20)
+	{
 		spawnRocket();
 	}
-	else if(hazardType < 100)
+	else if(hazardType < 90)
 	{
 		spawnAsteroid();
+	}
+	else
+	{
+		spawnRollingStones();
 	}
 }
 
@@ -129,24 +157,29 @@ void HazardController::spawnAsteroid()
 
 	if (asteroidIndex == -1) return;
 
-	int astroidType = (rand() % 100);
-	int size = (rand() % 150) + 50;
+	int astroidType = (GetRandom(0, 100));
+
+	int size = GetRandom(50, 300);
 
 	if (astroidType < 50)
 	{
-		double speed = 1000 - size * 4 + rand() % 200 - 100;
+		double speed = 700 - (size * 2 - 200) + GetRandom(100, 200);
 
-		asteroids[asteroidIndex]->Init(player->position + Vector2(0, -1000), Vector2(0, speed), Vector2(), size);
+		int lives = size / 100 + 1;
+
+		asteroids[asteroidIndex]->Init(player->position + Vector2(0, -1000), Vector2(0, speed), Vector2(), size, lives);
 	}
 	else
 	{
-		int speed = (rand() % 100) - 50;
+		int speed = GetRandom(-50, 50);
 		Vector2 pos;
 		pos.x = (speed > 0) ? (0 - size) : screenSize.x;
-		pos.y = (rand() % lroundf(screenSize.y) / 2);
-		double gravity = (rand() % 5) + 20;
 
-		asteroids[asteroidIndex]->Init(pos, Vector2(speed * 50, 0), Vector2(0,gravity), size);
+		pos.y = GetRandom(0, lroundf(screenSize.y) / 2);
+
+		double gravity = GetRandom(20, 25);
+
+		asteroids[asteroidIndex]->Init(pos, Vector2(speed * 50, 0), Vector2(0,gravity), size, 1);
 	}
 
 }
@@ -156,13 +189,13 @@ void HazardController::spawnRocket()
 {
 	int rocketIndex = -1;
 
-	cout << "Trying to spawn rocket" << endl;
-
 	for (int i = 0; i < homingRocketPoolSize; i++)
 	{
 		if (homingRockets[i] == nullptr)
 		{
-			homingRockets[i] = new HomingRocket(homingRocketTexture, std::vector<GameObject::CollisionLayers>{ GameObject::asteroids, GameObject::player, GameObject::bullet }, GameObject::rockets);
+			homingRockets[i] = new HomingRocket(homingRocketTexture,
+				std::vector<GameObject::CollisionLayers>{ GameObject::asteroids, GameObject::player, GameObject::bullet }, GameObject::rockets);
+
 			collisionSystem->AddCollider(homingRockets[i]);
 
 			rocketIndex = i;
@@ -178,9 +211,7 @@ void HazardController::spawnRocket()
 
 	if (rocketIndex == -1) return;
 
-	cout << "Rocket Spawned" << endl;
-
-	int entrySide = rand() % 3;
+	int entrySide = GetRandom(0, 3);
 
 	Vector2 startPos;
 
@@ -188,13 +219,13 @@ void HazardController::spawnRocket()
 	if (entrySide == 0)
 	{
 		startPos.x = 0;
-		startPos.y = (rand() % lroundf(screenSize.y) / 2);
+		startPos.y = GetRandom(0, lroundf(screenSize.y) / 2);
 
 	}
 	//Enters from the top
 	else if (entrySide == 1)
 	{
-		startPos.x = (rand() % lroundf(screenSize.x));
+		startPos.x = GetRandom(0, lroundf(screenSize.x));
 		startPos.y = 0;
 
 	}
@@ -202,12 +233,69 @@ void HazardController::spawnRocket()
 	else
 	{
 		startPos.x = screenSize.x;
-		startPos.y = (rand() % lroundf(screenSize.y) / 2);
+		startPos.y = GetRandom(0,  lroundf(screenSize.y) / 2);
 
 	}
 
-	double speed = rand() % 300 + 150; 
+	double speed = GetRandom(250, 650);
 
 	homingRockets[rocketIndex]->Init(startPos, speed, player);
 
+}
+
+void HazardController::spawnRollingStones()
+{
+	int stoneIndex = -1;
+
+	for (int i = 0; i < rollingStonePoolSize; i++)
+	{
+		if (rollingStones[i] == nullptr)
+		{
+			rollingStones[i] = new RollingStone(rollingStoneTexture,
+				std::vector<GameObject::CollisionLayers>{ GameObject::player, GameObject::rockets }, GameObject::rollingStone);
+
+			collisionSystem->AddCollider(rollingStones[i]);
+
+			stoneIndex = i;
+
+			break;
+		}
+		else if (!rollingStones[i]->isActive)
+		{
+			stoneIndex = i;
+			break;
+		}
+	}
+
+	if (stoneIndex == -1) return;
+
+	int radius = GetRandom(50, 100);
+	int speed = GetRandom(100, 150);
+	int startSide = GetRandom(0, 100);
+	cout << "Radius " << radius << endl;
+	Vector2 startPos = Vector2(0, screenSize.y - radius);
+	Vector2 direction;
+
+	if (startSide > 50)
+	{
+		startPos.x = -radius;
+		direction = Vector2(1, 0);
+	}
+	else
+	{
+		startPos.x = screenSize.x + radius;
+		direction = Vector2(-1, 0);
+	}
+
+	rollingStones[stoneIndex]->Init(startPos, speed, direction, radius);
+
+}
+
+int HazardController::GetRandom(int min, int max)
+{
+	randSeed++;
+	randSeed *= 13;
+	srand(time(NULL) + randSeed);
+
+	return rand() % (max - min) + min;
 }

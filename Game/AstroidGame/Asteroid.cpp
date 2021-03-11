@@ -25,7 +25,8 @@ void Asteroid::Update(double deltaTime)
 
 void Asteroid::OnCollision()
 {
-	isActive = false;
+	lives--;
+	if(lives <= 0) isActive = false;
 }
 
 void Asteroid::Render(SDL_Renderer * renderer)
@@ -43,9 +44,10 @@ void Asteroid::Render(SDL_Renderer * renderer)
 
 }
 
-void Asteroid::Init(Vector2 pos, Vector2 vel, Vector2 gravityAccel, int size)
+void Asteroid::Init(Vector2 pos, Vector2 vel, Vector2 gravityAccel, int size, int life)
 {
-	radius = size / 2;
+	lives = life;
+	radius = size / 2.5;
 	rect.w = rect.h = size;
 	position = pos;
 	velocity = vel;

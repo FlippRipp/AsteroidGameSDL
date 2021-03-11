@@ -9,8 +9,10 @@
 class Bullet : public GameObject
 {
 public:
-	Bullet(Vector2 dir, Vector2 startPos,int rad,std::vector<GameObject::CollisionLayers> collisionLayers, CollisionLayers layer);
+	Bullet(Vector2 dir, Vector2 startPos,int rad,std::vector<CollisionLayers> collisionLayers, CollisionLayers layer);
 	~Bullet();
+
+	void OnCollision();
 
 	void Render(SDL_Renderer* renderer);
 	void Update(double deltaTime);

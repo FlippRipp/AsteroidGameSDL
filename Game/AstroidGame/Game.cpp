@@ -46,8 +46,8 @@ Game::Game(const char* title, int resX, int resY, bool fullscreen)
 
 	inputs = new Inputs();
 	collsionSystem = new Collision2D(Vector2(resX, resY));
-	player = new Player(Vector2(resX / 2, resY / 2), Vector2(50, 50), Vector2(resX, resY), 25, std::vector<GameObject::CollisionLayers>{ GameObject::asteroids, GameObject::rockets }, GameObject::player, collsionSystem);
-	hazardController = new HazardController(3, 0.001, player, Vector2(resX, resY), renderer, collsionSystem);
+	player = new Player(Vector2(resX / 2, resY / 2), Vector2(50, 50), Vector2(resX, resY), 25, std::vector<GameObject::CollisionLayers>{ GameObject::asteroids, GameObject::rockets, GameObject::rollingStone  }, GameObject::player, collsionSystem);
+	hazardController = new HazardController(1, player, Vector2(resX, resY), renderer, collsionSystem);
 
 	collsionSystem->AddCollider(new GameObject(Vector2(-200, 0), 0));
 	collsionSystem->AddCollider(player);
@@ -59,7 +59,6 @@ Game::~Game()
 
 void Game::Update()
 {
-
 	//cout << 1 / deltaTime << endl;
 	inputs->UpdateInputs();
 	player->UpdatePlayer(inputs,deltaTime, GetTimeSec());
@@ -74,8 +73,8 @@ void Game::Update()
 void Game::Render()
 {
 	SDL_RenderClear(renderer);
-	player->Render(renderer);
 	hazardController->Render(renderer);
+	player->Render(renderer);
 	//render stuff here	
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderPresent(renderer);

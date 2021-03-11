@@ -8,7 +8,7 @@ HomingRocket::HomingRocket(SDL_Texture* texture,vector<GameObject::CollisionLaye
 	rocketTexture = texture;
 	rect.h = rocketSize.y;
 	rect.w = rocketSize.x;
-	radius = rocketSize.x / 2;
+	radius = rocketSize.x / 2.2;
 }
 
 HomingRocket::~HomingRocket()

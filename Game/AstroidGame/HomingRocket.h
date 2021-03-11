@@ -36,7 +36,7 @@ private:
 	double SpawnTime;
 
 	//Between 0 and 1
-	double turnSpeed = 0.05;
+	double turnSpeed = 0.02;
 
 	SDL_Rect rect;
 };

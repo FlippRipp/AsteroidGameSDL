@@ -79,6 +79,7 @@ void Collision2D::AddCollider(GameObject* gameObjectToAdd)
 
 		gameObjectToAdd->collisionCellX = gridX;
 		gameObjectToAdd->collisionCellY = gridY;
+		gameObjectToAdd->collisionCellIndex = gridX + gridY * gridCountX;
 
 		//std::cout << "GridX: " << gridX << ", GridY: " << gridY << " Index: " << gridX + gridY * gridCountX << std::endl;
 
@@ -97,10 +98,13 @@ void Collision2D::Update()
 		Vector2 pos = obj->GetRealPosition();
 		double objRadius = obj->radius;
 
+
 		if (!obj->isActive) continue;
 
-		if (pos.x > 0 && pos.x < screenSize.x - 1 && pos.y > 0 && pos.y < screenSize.y )
+		if (pos.x > 0 && pos.x < screenSize.x - 1 && pos.y > 0 && pos.y <= screenSize.y )
 		{
+
+
 			int gridX = floor(pos.x / GridSize);
 			int gridY = floor(pos.y / GridSize);
 
@@ -179,6 +183,6 @@ void Collision2D::Update()
 bool Collision2D::CheckCollisionMatrix(int layer, int collsionMatrix)
 {
 	//std::cout << collsionMatrix << " " << layer << " " << ((collsionMatrix >> layer) & 1) << std::endl;
-
-	return (collsionMatrix & layer);
+	bool check = (collsionMatrix & layer);
+	return check;
 }

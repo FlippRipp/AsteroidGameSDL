@@ -11,14 +11,17 @@ public:
 
 	//Gets the posiiton of the middle of the object instead of the pivot posion
 	Vector2 GetRealPosition();
+	void SetRealPosition(Vector2 pos);
 
 	virtual void OnCollision();
 
-	static enum CollisionLayers {
+	static enum CollisionLayers
+	{
 		player = 1,
 		bullet = 2,
 		rockets = 4,
-		asteroids = 8
+		asteroids = 8,
+		rollingStone = 16
 	};
 
 	void SetCollisionMatrix(std::vector<CollisionLayers> layers);
@@ -31,7 +34,7 @@ public:
 
 	int collisionCellX, collisionCellY;
 
-	int collisionMatrix;
+	int collisionMatrix = 0;
 
 	int collisionCellIndex;
 };

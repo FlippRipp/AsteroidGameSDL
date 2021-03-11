@@ -14,6 +14,13 @@ Bullet::~Bullet()
 {
 }
 
+void Bullet::OnCollision()
+{
+	isActive = false;
+}
+
+
+
 void Bullet::Render(SDL_Renderer * renderer)
 {
 	//std::cout << rect.w << std::endl;

@@ -13,20 +13,23 @@ class Player : public GameObject
 {
 public:
 	Player(Vector2 startPos, Vector2 size, Vector2 screenS, double rad, 
-		std::vector<GameObject::CollisionLayers> collisionLayers, 
+		std::vector<CollisionLayers> collisionLayers, 
 		CollisionLayers layer, Collision2D* cS);
 
 	~Player();
 
 	void Render(SDL_Renderer* renderer);
 	void UpdatePlayer(Inputs* input, double deltaTime, double time);
-	void Shoot();
+
+	void OnCollision();
 	
 	static const int BulletPoolSize = 1000;
-	Bullet* bulletList[BulletPoolSize] = { };
+	Bullet* bulletList[BulletPoolSize];
 
 	Collision2D* collisionSystem;
 private:
+
+	int lives = 3;
 
 	SDL_Rect rect;	
 	const double speed = 200;
@@ -35,6 +38,7 @@ private:
 	void UpdateBoost(double time, Inputs* input);
 	void GravityUpdate();
 	void Move(double deltaTime);
+	void Shoot();
 
 	Vector2 velocity;
 
