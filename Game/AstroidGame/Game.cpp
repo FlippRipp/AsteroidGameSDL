@@ -47,12 +47,13 @@ Game::Game(const char* title, int resX, int resY, bool fullscreen)
 	else
 	{
 		cout << "Error on SDL Init Error code: " << error << endl;
-
 	}
 
 	ressourceManager = new RessourceManager();
 
 	ressourceManager->RessourceInit(renderer);
+
+	scoreSystem = new ScoreSystem(ressourceManager);
 
 	inputs = new Inputs();
 	collsionSystem = new Collision2D(Vector2(resX, resY));
@@ -74,6 +75,7 @@ void Game::Update()
 	//cout << 1 / deltaTime << endl;
 	inputs->UpdateInputs();
 	player->UpdatePlayer(inputs,deltaTime, GetTimeSec());
+	scoreSystem->UpdateScore(GetTimeSec());
 	hazardController->Update(deltaTime, GetTimeSec());
 	collsionSystem->Update();
 	if (inputs->quitPressed)
@@ -91,15 +93,8 @@ void Game::Render()
 	SDL_RenderClear(renderer);
 	hazardController->Render(renderer);
 	player->Render(renderer);
+	scoreSystem->DisplayScoreScreen(renderer);
 	//render stuff here	
-
-	int texW = 0;
-	int texH = 0;
-	SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
-	textRect = { 0,0,texW,texH };
-
-	SDL_RenderCopy(renderer, texture, NULL, &textRect);
-
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderPresent(renderer);
 }
@@ -108,6 +103,8 @@ void Game::Reset()
 {
 	player->ResetPlayer();
 	hazardController->ResetHazards();
+	scoreSystem->ResetScore(GetTimeSec());
+	gameTime = 0;
 }
 
 void Game::GameLoop() {

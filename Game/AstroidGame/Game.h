@@ -10,6 +10,7 @@ using namespace std;
 #include "Collision2D.h"
 #include <SDL_TTF.h>
 #include "RessourceManager.h"
+#include "ScoreSystem.h"
 
 class Game
 {
@@ -27,6 +28,7 @@ public:
 	HazardController* hazardController;
 
 	RessourceManager* ressourceManager;
+	ScoreSystem* scoreSystem;
 
 	const double DesiredFps = 60;
 	const double msPerSecond = 1000;	

@@ -11,6 +11,8 @@ class RessourceManager
 		SDL_Texture* RocketTexture;
 		SDL_Texture* RollingStoneTexture;
 
+		const std::string scoreFilePath = "Ressources/Score.txt";
+
 		TTF_Font* font;
 
 		void RessourceInit(SDL_Renderer* renderer);
