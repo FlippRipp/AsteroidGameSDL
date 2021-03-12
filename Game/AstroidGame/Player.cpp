@@ -2,7 +2,7 @@
 
 Player::Player(Vector2 startPos, Vector2 size, Vector2 screenS, double rad, 
 	std::vector<GameObject::CollisionLayers> collisionLayers, 
-	CollisionLayers l, Collision2D* cS)
+	CollisionLayers l, Collision2D* cS, RessourceManager* rM)
 {
 	collisionSystem = cS;
 	SetCollisionMatrix(collisionLayers);
@@ -15,6 +15,8 @@ Player::Player(Vector2 startPos, Vector2 size, Vector2 screenS, double rad,
 	rect.h = size.y;
 
 	radius = rad;
+
+	texture = rM->PlayerTexture;
 
 	isActive = true;
 

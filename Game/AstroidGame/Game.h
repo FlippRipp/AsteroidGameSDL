@@ -9,6 +9,7 @@ using namespace std;
 #include <string>
 #include "Collision2D.h"
 #include <SDL_TTF.h>
+#include "RessourceManager.h"
 
 class Game
 {
@@ -24,6 +25,8 @@ public:
 	Inputs* inputs;
 	Player* player;
 	HazardController* hazardController;
+
+	RessourceManager* ressourceManager;
 
 	const double DesiredFps = 60;
 	const double msPerSecond = 1000;	

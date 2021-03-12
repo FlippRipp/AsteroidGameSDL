@@ -5,12 +5,13 @@
 #include "Collision2D.h"
 #include "RollingStone.h"
 #include <time.h>
+#include "RessourceManager.h"
 
 
 class HazardController
 {
 public:
-	HazardController(double delayStart, Player* p, Vector2 screen, SDL_Renderer* rend, Collision2D* col);
+	HazardController(double delayStart, Player* p, Vector2 screen, SDL_Renderer* rend, Collision2D* col, RessourceManager* rM);
 	~HazardController();
 
 	void Update(double deltaTime, double time);

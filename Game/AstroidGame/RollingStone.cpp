@@ -48,5 +48,5 @@ void RollingStone::Init(Vector2 pos, double speed, Vector2 moveDirection, double
 	direction = moveDirection;
 	rockSpeed = speed;
 	isActive = true;
-	rect.h = rect.w = rad;
+	rect.h = rect.w = rad * 2;
 }

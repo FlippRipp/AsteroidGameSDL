@@ -1,6 +1,6 @@
 #include "HazardController.h"
 
-HazardController::HazardController(double delayStart, Player* p, Vector2 screen, SDL_Renderer* rend, Collision2D* col)
+HazardController::HazardController(double delayStart, Player* p, Vector2 screen, SDL_Renderer* rend, Collision2D* col, RessourceManager* rM)
 {
 
 	nextDifficultyIncreaseTime = difficultyIncreaseIntervals;
@@ -8,9 +8,10 @@ HazardController::HazardController(double delayStart, Player* p, Vector2 screen,
 	player = p;
 	screenSize = screen;
 	collisionSystem = col;
-	asteroidTexture = RenderingUtilities::LoadTexture("Ressources/Asteroid.png", rend);
-	homingRocketTexture = RenderingUtilities::LoadTexture("Ressources/HomingRocket.png", rend);
-	rollingStoneTexture = RenderingUtilities::LoadTexture("Ressources/RollingStones.png", rend);
+
+	asteroidTexture = rM->AsteroidTexture;
+	homingRocketTexture = rM->RocketTexture;
+	rollingStoneTexture = rM->RollingStoneTexture;
 
 }
 
@@ -270,11 +271,11 @@ void HazardController::spawnRollingStones()
 
 	if (stoneIndex == -1) return;
 
-	int radius = GetRandom(50, 100);
+	int radius = GetRandom(25, 50);
 	int speed = GetRandom(100, 150);
 	int startSide = GetRandom(0, 100);
 	cout << "Radius " << radius << endl;
-	Vector2 startPos = Vector2(0, screenSize.y - radius);
+	Vector2 startPos = Vector2(0, screenSize.y - radius * 2);
 	Vector2 direction;
 
 	if (startSide > 50)

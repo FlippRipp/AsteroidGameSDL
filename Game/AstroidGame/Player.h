@@ -5,7 +5,7 @@
 #include <math.h>
 #include <iostream>
 #include "Bullet.h"
-#include "RenderingUtilities.h"
+#include "RessourceManager.h"
 #include "GameObject.h"
 #include "Collision2D.h"
 #include <SDL_TTF.h>
@@ -15,7 +15,7 @@ class Player : public GameObject
 public:
 	Player(Vector2 startPos, Vector2 size, Vector2 screenS, double rad, 
 		std::vector<CollisionLayers> collisionLayers, 
-		CollisionLayers layer, Collision2D* cS);
+		CollisionLayers layer, Collision2D* cS, RessourceManager* rM);
 
 	~Player();
 
