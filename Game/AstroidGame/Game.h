@@ -8,6 +8,7 @@ using namespace std;
 #include <SDL_image.h>
 #include <string>
 #include "Collision2D.h"
+#include <SDL_TTF.h>
 
 class Game
 {
@@ -30,13 +31,23 @@ public:
 	double deltaTime;
 	int frameCounter;
 private:
+	void Reset();
+
 	SDL_Window* window;
 	SDL_Renderer* renderer;
+	TTF_Font* font;
+	SDL_Surface* surface;
+	SDL_Color color = { 0,255,0 };
+	SDL_Rect textRect;
+	SDL_Texture * texture;
+
 	int cycleCount;
 	double accumilator = 0;
 	double cycleTime;
 	double independedGameTime;	
 	Collision2D* collsionSystem;
+
+
 	
 	bool isRunning = true;
 };

@@ -4,13 +4,14 @@ HazardController::HazardController(double delayStart, Player* p, Vector2 screen,
 {
 
 	nextDifficultyIncreaseTime = difficultyIncreaseIntervals;
-	hazardSpawnDelay = delayStart;
+	hazardSpawnDelay = originalHazardSpawnDelay = delayStart;
 	player = p;
 	screenSize = screen;
 	collisionSystem = col;
 	asteroidTexture = RenderingUtilities::LoadTexture("Ressources/Asteroid.png", rend);
 	homingRocketTexture = RenderingUtilities::LoadTexture("Ressources/HomingRocket.png", rend);
 	rollingStoneTexture = RenderingUtilities::LoadTexture("Ressources/RollingStones.png", rend);
+
 }
 
 HazardController::~HazardController()
@@ -298,4 +299,35 @@ int HazardController::GetRandom(int min, int max)
 	srand(time(NULL) + randSeed);
 
 	return rand() % (max - min) + min;
+}
+
+void HazardController::ResetHazards()
+{
+
+
+	for (int i = 0; i < asteroidPoolSize; i++)
+	{
+		if (asteroids[i] != nullptr) 
+		{
+			asteroids[i]->isActive = false;
+		}
+	}
+
+	for (int i = 0; i < homingRocketPoolSize; i++)
+	{
+		if (homingRockets[i] != nullptr)
+		{
+			homingRockets[i]->isActive = false;
+		}
+	}
+
+	for (int i = 0; i < rollingStonePoolSize; i++)
+	{
+		if (rollingStones[i] != nullptr)
+		{
+			rollingStones[i]->isActive = false;
+		}
+	}
+
+	hazardSpawnDelay = originalHazardSpawnDelay;
 }

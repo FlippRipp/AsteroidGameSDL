@@ -8,6 +8,7 @@ Player::Player(Vector2 startPos, Vector2 size, Vector2 screenS, double rad,
 	SetCollisionMatrix(collisionLayers);
 	layer = l;
 	rect = SDL_Rect();
+	startPosition = position = startPos;
 	rect.x = startPos.x;
 	rect.y = startPos.y;
 	rect.w = size.x;
@@ -19,8 +20,8 @@ Player::Player(Vector2 startPos, Vector2 size, Vector2 screenS, double rad,
 
 	if(radius == 0) radius = std::fmin(size.x, size.y);
 
-	position = startPos;
 	screenSize = screenS;
+	boostFuel = boostMaxFuel;
 }
 
 Player::~Player()
@@ -97,7 +98,7 @@ void Player::UpdatePlayer(Inputs* input, double deltaTime, double time)
 
 	if (isDead && deathTime < time)
 	{
-		input->quitPressed = true;
+		Reset = true;
 	}
 
 	if (!isActive) return;
@@ -153,6 +154,25 @@ void Player::OnCollision()
 		framesSinceLastHit = 0;
 		lives--;
 	}
+}
+
+void Player::ResetPlayer()
+{
+	for (int i = 0; i < BulletPoolSize; i++)
+	{
+		if (bulletList[i] != nullptr)
+		{
+			bulletList[i]->isActive = false;
+		}
+	}
+
+	lives = maxLives;
+	position = startPosition;
+	isDead = false;
+	isActive = true;
+	Reset = false;
+	velocity = Vector2::Zero();
+	boostFuel = boostMaxFuel;
 }
 
 void Player::Shoot()

@@ -8,6 +8,7 @@
 #include "RenderingUtilities.h"
 #include "GameObject.h"
 #include "Collision2D.h"
+#include <SDL_TTF.h>
 
 class Player : public GameObject
 {
@@ -27,9 +28,13 @@ public:
 	Bullet* bulletList[BulletPoolSize];
 
 	Collision2D* collisionSystem;
+
+	void ResetPlayer();
+	bool Reset = false;
 private:
 
 	int lives = 3;
+	int maxLives = 3;
 
 	SDL_Rect rect;	
 	const double speed = 200;
@@ -64,5 +69,8 @@ private:
 	double deathDelay = 2;
 	double deathTime;
 
+	Vector2 startPosition;
+
 	SDL_Texture* texture;
+
 };

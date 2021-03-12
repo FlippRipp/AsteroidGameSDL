@@ -16,6 +16,8 @@ public:
 	void Update(double deltaTime, double time);
 	void Render(SDL_Renderer* renderer);
 
+	void ResetHazards();
+
 private:
 
 	void spawnHazards();
@@ -51,6 +53,8 @@ private:
 
 	double hazardSpawnDelay;
 	double lastSpawnTime;
+
+	double originalHazardSpawnDelay;
 
 	int randSeed = 0;
 };

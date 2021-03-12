@@ -3,7 +3,10 @@
 
 Game::Game(const char* title, int resX, int resY, bool fullscreen)
 {
+
+
 	int error = SDL_Init(SDL_INIT_EVERYTHING);
+	int ttfError = TTF_Init();
 	if (error == 0)
 	{
 		int flag = 0;
@@ -17,6 +20,15 @@ Game::Game(const char* title, int resX, int resY, bool fullscreen)
 		if (window)
 		{
 			cout << "Window successfully created" << endl;
+		}
+
+		if (ttfError == 0)
+		{
+			cout << "SDL_TTF successfully created" << endl;
+			font = TTF_OpenFont("Ressources/ArialCE.ttf", 25);			
+			surface = TTF_RenderText_Solid(font, "SDL_TTF successfully created", color);
+
+
 		}
 
 		renderer = SDL_CreateRenderer(window, -1, 0);
@@ -68,6 +80,10 @@ void Game::Update()
 	{
 		isRunning = false;
 	}
+	if (player->Reset || inputs->rDown)
+	{
+		Reset();
+	}
 }
 
 void Game::Render()
@@ -76,8 +92,23 @@ void Game::Render()
 	hazardController->Render(renderer);
 	player->Render(renderer);
 	//render stuff here	
+
+	int texW = 0;
+	int texH = 0;
+	SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
+	textRect = { 0,0,texW,texH };
+
+	texture = SDL_CreateTextureFromSurface(renderer, surface);
+	SDL_RenderCopy(renderer, texture, NULL, &textRect);
+
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderPresent(renderer);
+}
+
+void Game::Reset()
+{
+	player->ResetPlayer();
+	hazardController->ResetHazards();
 }
 
 void Game::GameLoop() {
@@ -118,5 +149,6 @@ void Game::GameLoop() {
 
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
+	TTF_Quit();
 	SDL_Quit();
 }

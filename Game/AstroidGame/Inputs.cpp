@@ -54,6 +54,9 @@ void Inputs::ChangeKeyState(SDL_Event event, bool state)
 	case SDLK_k:
 		kDown = state;
 		break;
+	case SDLK_r:
+		rDown = state;
+		break;
 	default:
 		break;
 	}
