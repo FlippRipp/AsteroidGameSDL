@@ -36,6 +36,8 @@ Player::~Player()
 
 void Player::Render(SDL_Renderer * renderer)
 {
+	if (!isActive) return;
+
 	for (int i = 0; i < BulletPoolSize; i++)
 	{
 		if (bulletList[i] != NULL)
@@ -86,11 +88,21 @@ void Player::Render(SDL_Renderer * renderer)
 
 void Player::UpdatePlayer(Inputs* input, double deltaTime, double time)
 {	
-	framesSinceLastHit++;
-	if (lives <= 0)
+	if (lives <= 0 && !isDead)
+	{
+		isDead = true;
+		deathTime = time + deathDelay;
+		isActive = false;
+	}
+
+	if (isDead && deathTime < time)
 	{
 		input->quitPressed = true;
 	}
+
+	if (!isActive) return;
+	framesSinceLastHit++;
+
 	bool horizontalMovement = false;
 	if (!isGrounded)
 	{
@@ -134,6 +146,8 @@ void Player::UpdatePlayer(Inputs* input, double deltaTime, double time)
 
 void Player::OnCollision()
 {
+	if (!isActive) return;
+
 	if (framesSinceLastHit > invincibilityframes)
 	{
 		framesSinceLastHit = 0;

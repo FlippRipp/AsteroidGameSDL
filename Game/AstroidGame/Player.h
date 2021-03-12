@@ -60,5 +60,9 @@ private:
 	int invincibilityframes = 20;
 	int framesSinceLastHit = 0;
 
+	bool isDead = false;
+	double deathDelay = 2;
+	double deathTime;
+
 	SDL_Texture* texture;
 };
